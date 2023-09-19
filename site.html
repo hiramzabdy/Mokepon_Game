@@ -7,6 +7,7 @@
 </head>
 
 <body>
+
     <h1>MOKEPON! 🔥💧🌱</h1>
 
     <section id="seleccion_mascota">
@@ -17,16 +18,15 @@
         <label for="capipepo">Capipepo</label>
         <input type="radio", name="mascota", id="ratigueya" />
         <label for="ratigueya">Ratigueya</label>
-        <button>Seleccionar</button>
+        <button id="boton-mascota">Seleccionar</button>
     </section>
 
     <section id="seleccion_ataque">
-        <p>Tu mascota tiene <span>3</span> vidas</p>
-        <p>La mascota rival tiene <span>3</span> vidas</p>
-
-        <button>FUEGO 🔥</button>
-        <button>AGUA 💧</button>
-        <button>TIERRA 🌱</button>
+        <p>Tu mascota <span id="mascota-jugador"></span> tiene <span id="vidas-mascota-jugador">3</span> vidas</p>
+        <p>La mascota <span id="mascota-enemigo"></span> rival tiene <span id="vidas-mascota-enemigo">3</span> vidas</p>
+        <button id="boton-fuego">FUEGO 🔥</button>
+        <button id="boton-agua">AGUA 💧</button>
+        <button id="boton-tierra">TIERRA 🌱</button>
     </section>
 
     <section id="mensajes">
@@ -37,8 +37,5 @@
         <button>Reiniciar</button>
     </section>
 
-    <p>
-
-    </p>
 </body>
 </html>
