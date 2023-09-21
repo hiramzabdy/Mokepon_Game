@@ -10,7 +10,7 @@
 
     <h1>MOKEPON! 🔥💧🌱</h1>
 
-    <section id="seleccion_mascota">
+    <section id="seleccion-mascota">
         <h2>Elige a tu mascota</h2>
         <input type="radio", name="mascota", id="hipodoge" />
         <label for="hipodoge">Hipodoge</label>
@@ -21,20 +21,23 @@
         <button id="boton-mascota">Seleccionar</button>
     </section>
 
-    <section id="seleccion_ataque">
-        <p>Tu mascota <span id="mascota-jugador"></span> tiene <span id="vidas-mascota-jugador">3</span> vidas</p>
-        <p>La mascota <span id="mascota-enemigo"></span> rival tiene <span id="vidas-mascota-enemigo">3</span> vidas</p>
-        <button id="boton-fuego">FUEGO 🔥</button>
-        <button id="boton-agua">AGUA 💧</button>
-        <button id="boton-tierra">TIERRA 🌱</button>
+    <section id="info-mascotas">
+        <p id="info-mascota-jugador">Tu mascota <span id="mascota-jugador"></span> tiene <span id="vidas-jugador">3</span> vidas</p>
+        <p>La mascota <span id="mascota-enemigo"></span> rival tiene <span id="vidas-enemigo">3</span> vidas</p>
+    </section>
+
+    <section id="seleccion-ataque">
+        <button id="boton-fuego", disabled="true">FUEGO 🔥</button>
+        <button id="boton-agua", disabled="true">AGUA 💧</button>
+        <button id="boton-tierra", disabled="true">TIERRA 🌱</button>
     </section>
 
     <section id="mensajes">
-        <p>Esta es la sección de mensajes</p>
+        <br>
     </section>
 
     <section id="reiniciar">
-        <button>Reiniciar</button>
+        <button id="boton-reiniciar", disabled="true">Reiniciar</button>
     </section>
 
 </body>
