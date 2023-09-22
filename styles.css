@@ -12,3 +12,26 @@
     justify-content: center;
     align-items: center;
 }
+
+.tarjeta-mokepon {
+    width: 100px;
+    height: 100px;
+    background: aquamarine;
+    padding: 10px;
+    box-sizing: border-box;
+    margin: 5px;
+    border: 1px solid;
+}
+
+input {
+    display: none;
+}
+
+button{
+    width: 100px;
+    height: 36px;
+    background: darkviolet;
+    color: white;
+    padding: 5px;
+    border: 2px solid black;
+}
