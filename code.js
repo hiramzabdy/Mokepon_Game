@@ -2,20 +2,29 @@ let ataqueJugador
 let ataqueEnemigo
 let vidasJugador = 3
 let vidasEnemigo = 3
+
 let botonMascota
 let botonFuego
 let botonAgua
 let botonTierra
+let botonReiniciar
+let seccionAtaque
 
 function startGame() {
     botonMascota = document.getElementById("boton-mascota")
-    botonMascota.addEventListener("click", seleccionarMascota)
     botonFuego = document.getElementById("boton-fuego")
-    botonFuego.addEventListener("click", seleccionarFuego)
     botonAgua = document.getElementById("boton-agua")
-    botonAgua.addEventListener("click", seleccionarAgua)
     botonTierra = document.getElementById("boton-tierra")
+    botonReiniciar = document.getElementById("boton-reiniciar")
+    seccionAtaque = document.getElementById("seleccion-ataque")
+
+    botonMascota.addEventListener("click", seleccionarMascota)
+    botonFuego.addEventListener("click", seleccionarFuego)
+    botonAgua.addEventListener("click", seleccionarAgua)
     botonTierra.addEventListener("click", seleccionarTierra)
+    botonReiniciar.addEventListener("click", reiniciarJuego)
+    seccionAtaque.style.display = "none"
+    botonReiniciar.style.display = "none"
 }
 
 function seleccionarMascota() {
@@ -54,9 +63,7 @@ function seleccionarMascotaEnemigo() {
         case 3:
             mascotaEnemigo.innerHTML = "Ratigueya"
     }
-    botonFuego.disabled = false
-    botonAgua.disabled = false
-    botonTierra.disabled = false
+    seccionAtaque.style.display = "block"
 }
 
 function seleccionarFuego() {
@@ -151,11 +158,7 @@ function crearMensajeFinal(resultado){
     let parrafo = document.createElement("p")
     parrafo.innerHTML = resultado
     seccionMensajes.appendChild(parrafo)
-    
-    let botonReiniciar = document.getElementById("boton-reiniciar")
-    botonReiniciar.addEventListener("click", reiniciarJuego)
-    botonReiniciar.disabled=false
-
+    botonReiniciar.style.display =""
 }
 
 function reiniciarJuego(){
