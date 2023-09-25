@@ -1,8 +1,8 @@
-.titulo {
-    color: lightcoral;
-    width: 310px;
-    height: 50px;
-    background-color: teal;
+@import url('https://fonts.googleapis.com/css2?family=Skranji:wght@700&display=swap');
+
+body{
+    font-family: 'Skranji', cursive;
+    background-color: #2E4374;
 }
 
 #seleccion-mascota {
@@ -13,14 +13,38 @@
     align-items: center;
 }
 
+.titulo {
+    color: white;
+    font-size: 80px;
+}
+
+.subtitulo{
+    color: white;
+    font-size: 32;
+}
+
+.tarjetas{
+    display: flex;
+    gap: 10px;
+}
+
 .tarjeta-mokepon {
-    width: 100px;
+    width: 180px;
     height: 100px;
-    background: aquamarine;
+    background: #7C81AD;
     padding: 10px;
     box-sizing: border-box;
     margin: 5px;
     border: 1px solid;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: stretch;
+}
+
+.tarjeta-mokepon img {
+    width: 80px;
 }
 
 input {
@@ -30,8 +54,11 @@ input {
 button{
     width: 100px;
     height: 36px;
-    background: darkviolet;
+    margin-top: 10px;
+    background: #4B527E;
     color: white;
     padding: 5px;
-    border: 2px solid black;
+    border: 1px solid black;
+    border-radius: 20px;
+    font-family: 'Skranji', cursive;
 }
