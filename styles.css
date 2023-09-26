@@ -6,7 +6,7 @@ body{
 }
 
 #seleccion-mascota {
-    height: 100vh;
+    /*height: 100vh;*/
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -16,6 +16,12 @@ body{
 .titulo {
     color: white;
     font-size: 80px;
+    display: flex;
+    align-content: flex-start;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 32px;
 }
 
 .subtitulo{
@@ -61,4 +67,33 @@ button{
     border: 1px solid black;
     border-radius: 20px;
     font-family: 'Skranji', cursive;
+}
+
+#seleccion-ataque{
+    flex-direction: column;
+    align-items: center;
+}
+
+#informacion-vidas{
+    padding: 24px;
+    border: 2px solid;
+    margin: 20px;
+    border-radius: 32px;
+    background: cadetblue;
+}
+
+.boton-ataque{
+    background-color: aqua;
+}
+
+#boton-tierra{
+    background-color: darkgreen;
+}
+
+#boton-agua{
+    background-color: cornflowerblue;
+}
+
+#boton-fuego{
+    background-color: darkred;
 }

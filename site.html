@@ -8,9 +8,9 @@
 </head>
 
 <body>
+    <h1 id="encabezado" class="titulo">Mokepon</h1>
 
     <section id="seleccion-mascota">
-        <h1 id="encabezado" class="titulo">Mokepon</h1>
         <h2 class="subtitulo">Elige a tu mascota</h2>
 
         <div class="tarjetas">
@@ -31,26 +31,32 @@
                 <p>Ratigueya</p>
                 <img src="./assets/mokepons_mokepon_ratigueya_attack.png" alt="">
             </label>
-
         </div>
 
         <button id="boton-mascota">Seleccionar</button>
     </section>
 
     <section id="seleccion-ataque">
-        <p id="info-mascota-jugador">Tu mascota <span id="mascota-jugador"></span> tiene <span id="vidas-jugador">3</span> vidas</p>
-        <p>La mascota <span id="mascota-enemigo"></span> rival tiene <span id="vidas-enemigo">3</span> vidas</p>
-        <button id="boton-fuego">FUEGO 🔥</button>
-        <button id="boton-agua">AGUA 💧</button>
-        <button id="boton-tierra">TIERRA 🌱</button>
-    </section>
+        <h2 class="subtitulo">Elige tu ataque</h2>
+        <div>
+            <button id="boton-fuego" class="boton-ataque">FUEGO 🔥</button>
+            <button id="boton-agua" class="boton-ataque">AGUA 💧</button>
+            <button id="boton-tierra" class="boton-ataque">TIERRA 🌱</button>
+        </div>
 
-    <section id="mensajes">
-    </section>
+        <div>
+            <section id="mensajes">
+            </section>
+        
+            <section id="reiniciar">
+            <button id="boton-reiniciar">Reiniciar</button>
+            </section>
+        </div>
 
-    <section id="reiniciar">
-        <button id="boton-reiniciar">Reiniciar</button>
+        <div id="informacion-vidas">
+            <p id="info-mascota-jugador">Tu mascota <span id="mascota-jugador"></span> tiene <span id="vidas-jugador">3</span> vidas</p>
+            <p>La mascota <span id="mascota-enemigo"></span> rival tiene <span id="vidas-enemigo">3</span> vidas</p>
+        </div>
     </section>
-
 </body>
 </html>

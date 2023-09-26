@@ -3,6 +3,7 @@ let ataqueEnemigo
 let vidasJugador = 3
 let vidasEnemigo = 3
 
+let seccionMastoca
 let botonMascota
 let botonFuego
 let botonAgua
@@ -17,6 +18,7 @@ function startGame() {
     botonTierra = document.getElementById("boton-tierra")
     botonReiniciar = document.getElementById("boton-reiniciar")
     seccionAtaque = document.getElementById("seleccion-ataque")
+    seccionMastoca = document.getElementById("seleccion-mascota")
 
     botonMascota.addEventListener("click", seleccionarMascota)
     botonFuego.addEventListener("click", seleccionarFuego)
@@ -51,6 +53,7 @@ function seleccionarMascota() {
 }
 
 function seleccionarMascotaEnemigo() {
+    seccionMastoca.style.display = "none"
     rng = aleatorio(1, 3)
     mascotaEnemigo = document.getElementById("mascota-enemigo")
     switch (rng) {
@@ -63,7 +66,7 @@ function seleccionarMascotaEnemigo() {
         case 3:
             mascotaEnemigo.innerHTML = "Ratigueya"
     }
-    seccionAtaque.style.display = "block"
+    seccionAtaque.style.display = "flex"
 }
 
 function seleccionarFuego() {
