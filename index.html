@@ -1,4 +1,5 @@
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,24 +11,24 @@
 <body>
     <h1 id="encabezado" class="titulo">Mokepon</h1>
 
-    <section id="seleccion-mascota">
+    <section id="seccion-seleccion-mascota">
         <h2 class="subtitulo">Elige a tu mascota</h2>
 
         <div class="tarjetas">
-            <input type="radio", name="mascota", id="hipodoge" />
-            <label for="hipodoge", class="tarjeta-mokepon">
+            <input type="radio" , name="mascota" , id="hipodoge" />
+            <label for="hipodoge" , class="tarjeta-mokepon">
                 <p>Hipodoge</p>
                 <img src="./assets/mokepons_mokepon_hipodoge_attack.png" alt="">
             </label>
 
-            <input type="radio", name="mascota", id="capipepo" />
-            <label for="capipepo", class="tarjeta-mokepon">
+            <input type="radio" , name="mascota" , id="capipepo" />
+            <label for="capipepo" , class="tarjeta-mokepon">
                 <p>Capipepo</p>
                 <img src="./assets/mokepons_mokepon_capipepo_attack.png" alt="">
             </label>
-    
-            <input type="radio", name="mascota", id="ratigueya" />
-            <label for="ratigueya", class="tarjeta-mokepon">
+
+            <input type="radio" , name="mascota" , id="ratigueya" />
+            <label for="ratigueya" , class="tarjeta-mokepon">
                 <p>Ratigueya</p>
                 <img src="./assets/mokepons_mokepon_ratigueya_attack.png" alt="">
             </label>
@@ -36,27 +37,32 @@
         <button id="boton-mascota">Seleccionar</button>
     </section>
 
-    <section id="seleccion-ataque">
+    <section id="game-screen">
         <h2 class="subtitulo">Elige tu ataque</h2>
-        <div>
+
+        <div id="seccion-seleccion-ataque">
             <button id="boton-fuego" class="boton-ataque">FUEGO 🔥</button>
             <button id="boton-agua" class="boton-ataque">AGUA 💧</button>
             <button id="boton-tierra" class="boton-ataque">TIERRA 🌱</button>
         </div>
 
-        <div>
-            <section id="mensajes">
-            </section>
-        
-            <section id="reiniciar">
-            <button id="boton-reiniciar">Reiniciar</button>
-            </section>
+        <div id="seccion-mascotas">
+            <div class="div-mascota">
+                <p id="info-mascota-jugador">Tu mascota <span id="mascota-jugador"></span> tiene <span
+                        id="vidas-jugador">3</span> vidas</p>
+            </div>
+            <div class="div-mascota">
+                <p>La mascota <span id="mascota-enemigo"></span> rival tiene <span id="vidas-enemigo">3</span> vidas</p>
+            </div>
         </div>
 
-        <div id="informacion-vidas">
-            <p id="info-mascota-jugador">Tu mascota <span id="mascota-jugador"></span> tiene <span id="vidas-jugador">3</span> vidas</p>
-            <p>La mascota <span id="mascota-enemigo"></span> rival tiene <span id="vidas-enemigo">3</span> vidas</p>
+        <div id="mensajes">
         </div>
+
+        <button id="boton-reiniciar" , style="display: none">Reiniciar</button>
+
     </section>
+
 </body>
+
 </html>

@@ -1,33 +1,50 @@
+//Variables para juego
 let ataqueJugador
 let ataqueEnemigo
 let vidasJugador = 3
 let vidasEnemigo = 3
+let mascotaJugador
+let mascotaEnemigo
 
-let seccionMastoca
+//Secciones html
+let seccionSeleccionMastoca
+let seccionSeleccionAtaque
+let seccionMascotas
+let seccionMensajes
+let seccionGameScreen
+
+//Botones html
 let botonMascota
 let botonFuego
 let botonAgua
 let botonTierra
 let botonReiniciar
-let seccionAtaque
+
 
 function startGame() {
+
+    //Gets html element to global variables
+    seccionSeleccionMastoca = document.getElementById("seccion-seleccion-mascota")
+    seccionSeleccionAtaque = document.getElementById("seccion-seleccion-ataque")
+    seccionMascotas = document.getElementById("seccion-mascota")
+    seccionMensajes = document.getElementById("mensajes")
+    seccionGameScreen = document.getElementById("game-screen")
+
     botonMascota = document.getElementById("boton-mascota")
     botonFuego = document.getElementById("boton-fuego")
     botonAgua = document.getElementById("boton-agua")
     botonTierra = document.getElementById("boton-tierra")
     botonReiniciar = document.getElementById("boton-reiniciar")
-    seccionAtaque = document.getElementById("seleccion-ataque")
-    seccionMastoca = document.getElementById("seleccion-mascota")
 
+    //Adds functions to buttons
     botonMascota.addEventListener("click", seleccionarMascota)
     botonFuego.addEventListener("click", seleccionarFuego)
     botonAgua.addEventListener("click", seleccionarAgua)
     botonTierra.addEventListener("click", seleccionarTierra)
     botonReiniciar.addEventListener("click", reiniciarJuego)
-    seccionAtaque.style.display = "none"
-    botonReiniciar.style.display = "none"
 }
+
+
 
 function seleccionarMascota() {
     let inputHipodoge = document.getElementById("hipodoge")
@@ -53,7 +70,7 @@ function seleccionarMascota() {
 }
 
 function seleccionarMascotaEnemigo() {
-    seccionMastoca.style.display = "none"
+    seccionSeleccionMastoca.style.display = "none"
     rng = aleatorio(1, 3)
     mascotaEnemigo = document.getElementById("mascota-enemigo")
     switch (rng) {
@@ -66,7 +83,7 @@ function seleccionarMascotaEnemigo() {
         case 3:
             mascotaEnemigo.innerHTML = "Ratigueya"
     }
-    seccionAtaque.style.display = "flex"
+    seccionGameScreen.style.display = "flex"
 }
 
 function seleccionarFuego() {
@@ -102,7 +119,6 @@ function seleccionarAtaqueEnemigo() {
 }
 
 function crearMensajeCombate() {
-    let seccionMensajes = document.getElementById("mensajes")
     let parrafo = document.createElement("p")
     resultado = combate()
     parrafo.innerHTML = "Tu mascota atacó con " + ataqueJugador + ". La mascota del enemigo atacó con " + ataqueEnemigo + ". - " + resultado
@@ -157,7 +173,6 @@ function revisarVidas(){
 }
 
 function crearMensajeFinal(resultado){
-    let seccionMensajes = document.getElementById("mensajes")
     let parrafo = document.createElement("p")
     parrafo.innerHTML = resultado
     seccionMensajes.appendChild(parrafo)
