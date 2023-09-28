@@ -6,7 +6,6 @@ body{
 }
 
 section {
-    /*height: 100vh;*/
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -14,23 +13,32 @@ section {
 }
 
 button{
-    width: 112px;
-    height: 36px;
-    margin: 12px;
+    width: 200px;
+    height: 50px;
+    margin: 8px;
     background: #4B527E;
     color: white;
     padding: 5px;
     border: 2px solid black;
     border-radius: 20px;
     font-family: 'Skranji', cursive;
+    font-size: 20px;
 }
 
 input{
     display: none;
 }
 
-input:checked+label {
+input:hover+label {
     background-color: aquamarine;
+    border: 2px solid;
+    border-radius: 20px;
+}
+
+input:checked+label{
+    background-color: aquamarine;
+    border: 4px solid;
+    border-radius: 20px;
 }
 
 .titulo {
@@ -41,18 +49,19 @@ input:checked+label {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin: 32px;
+    margin: 24px;
 }
 
 .subtitulo{
     color: white;
     font-size: 32;
-    margin: 8px;
+    margin: 12px;
 }
 
-.tarjetas{
+.div-tarjetas-mokepones{
     display: flex;
     gap: 10px;
+    margin: 12px;
 }
 
 .tarjeta-mokepon {
@@ -81,11 +90,12 @@ input:checked+label {
     align-content: center;
     justify-content: center;
     align-items: center;
-
     text-align: center;
+
     width: 280px;
+    height: 112px;
     padding: 12px;
-    border: 2px solid;
+    border: 3px solid;
     border-radius: 20px;
     margin: 16px;
     background: cadetblue
@@ -96,23 +106,15 @@ input:checked+label {
     margin: 20px;
 }
 
-#seleccion-ataque{
-    display: none;
-    flex-direction: column;
-    align-items: center;
+.boton-ataque {
+    width: 120px;
+    height: 40px;
+    font-size: 16px;
 }
 
-#seccion-mensajes{
-    flex-direction: column;
-    align-items: center; 
-}
-
-#informacion-vidas{
-    padding: 24px;
-    border: 2px solid;
-    margin: 20px;
-    border-radius: 32px;
-    background: cadetblue;
+button:hover{
+    border: 4px solid black;
+    border-radius: 20px;
 }
 
 #boton-tierra{
@@ -140,23 +142,40 @@ input:checked+label {
 }
 
 #mensajes {
-    display: flex;
-    flex-direction: column-reverse;
-    align-content: center;
-    align-items: center;
-    width: 680px;
+    display: grid;
+    grid-template-columns: 320px 320px;
+    justify-items: center;
 }
 
 #resultado{
     background: darkgray;
-    width: 360px;
+    width: 300px;
+    text-align: center;
+    padding: 12px;
+    border: 2px solid;
+    border-radius: 20px;
+    margin: 16px;
 }
 
 #seccion-seleccion-ataque{
     display: flex;
+    align-items: center;
 }
 
-#boton-reiniciar{
-    width: 300px;
-    height: 50px;
+@media (max-width: 720px) {
+    
+    .tarjetas, .div-tarjetas-mokepones {
+        flex-direction: column;
+    }
+
+    #seccion-seleccion-ataque{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #seccion-mascotas{
+        flex-direction: column;
+    }
+
 }

@@ -10,9 +10,10 @@ let mascotaEnemigo
 let seccionSeleccionMastoca
 let seccionSeleccionAtaque
 let seccionMascotas
-let seccionMensajes
 let seccionGameScreen
 let divResultado
+let mensajesJugador
+let mensajesEnemigo
 
 //Botones html
 let botonMascota
@@ -28,9 +29,10 @@ function startGame() {
     seccionSeleccionMastoca = document.getElementById("seccion-seleccion-mascota")
     seccionSeleccionAtaque = document.getElementById("seccion-seleccion-ataque")
     seccionMascotas = document.getElementById("seccion-mascota")
-    seccionMensajes = document.getElementById("mensajes")
     seccionGameScreen = document.getElementById("game-screen")
     divResultado = document.getElementById("resultado")
+    mensajesJugador = document.getElementById("mensajes-jugador")
+    mensajesEnemigo = document.getElementById("mensajes-enemigo")
 
     botonMascota = document.getElementById("boton-mascota")
     botonFuego = document.getElementById("boton-fuego")
@@ -153,10 +155,13 @@ function seleccionarAtaqueEnemigo() {
 }
 
 function crearMensajeCombate() {
-    let parrafo = document.createElement("p")
+    let parrafoJugador = document.createElement("p")
+    let parrafoEnemigo = document.createElement("p")
     resultado = combate()
-    parrafo.innerHTML = "Tu mascota atacó con " + ataqueJugador + ". La mascota del enemigo atacó con " + ataqueEnemigo + "."
-    seccionMensajes.appendChild(parrafo)
+    parrafoJugador.innerHTML = "Ataque del jugador: " + ataqueJugador + "."
+    parrafoEnemigo.innerHTML = "Ataque del enemigo: " + ataqueEnemigo + "."
+    mensajesJugador.appendChild(parrafoJugador)
+    mensajesEnemigo.appendChild(parrafoEnemigo)
     divResultado.innerHTML = resultado
     revisarVidas()
 }
@@ -215,6 +220,7 @@ function revisarVidas(){
 function crearMensajeFinal(resultado){
     divResultado.innerHTML = resultado
     botonReiniciar.style.display =""
+    seccionSeleccionAtaque.style.display="none"
 }
 
 function reiniciarJuego(){
