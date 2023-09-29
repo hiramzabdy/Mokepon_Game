@@ -4,14 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MOKEPON GAME</title>
-    <script src="code.js"></script>
     <link rel="stylesheet" href="./styles.css">
 </head>
 
 <body>
     <h1 id="encabezado" class="titulo">Mokepon</h1>
 
-    <section id="seccion-seleccion-mascota">
+    <section id="pets-screen">
         <h2 class="subtitulo">Elige a tu mascota</h2>
 
         <div class="div-tarjetas-mokepones">
@@ -39,11 +38,11 @@
 
     <section id="game-screen">
 
-        <div id="resultado">
+        <p id="resultado">
             ¡Que comience el juego!
-        </div>
+        </p>
 
-        <div id="seccion-mascotas">
+        <div id="div-mascotas">
             <div class="div-mascota">
                 <p id="info-mascota-jugador">Vidas Jugador: <span id="vidas-jugador">3</span></p>
                 <img id="miniatura-jugador" src="" alt="">
@@ -54,7 +53,7 @@
             </div>
         </div>
 
-        <div id="seccion-seleccion-ataque">
+        <div id="div-ataques">
             <h2 class="subtitulo">Elige tu ataque:</h2>
             <button id="boton-fuego" class="boton-ataque">FUEGO 🔥</button>
             <button id="boton-agua" class="boton-ataque">AGUA 💧</button>
@@ -63,13 +62,13 @@
         
         <button id="boton-reiniciar" , style="display: none">Reiniciar</button>
 
-        <div id="mensajes">
+        <div id="div-mensajes">
             <div id="mensajes-jugador"></div>
             <div id="mensajes-enemigo"></div>
         </div>
 
     </section>
-
+    
+    <script src="code.js"></script>
 </body>
-
 </html>

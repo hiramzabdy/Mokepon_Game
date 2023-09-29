@@ -1,52 +1,52 @@
-//Variables para juego
-let ataqueJugador
+//game global variables
 let ataqueEnemigo
+let ataqueJugador
 let vidasJugador = 3
 let vidasEnemigo = 3
 let mascotaJugador
 let mascotaEnemigo
 
-//Secciones html
-let seccionSeleccionMastoca
-let seccionSeleccionAtaque
-let seccionMascotas
-let seccionGameScreen
-let divResultado
-let mensajesJugador
-let mensajesEnemigo
+//html sections
+const sectionPetsScreen = document.getElementById("pets-screen")
+const sectionGameScreen = document.getElementById("game-screen")
 
-//Botones html
-let botonMascota
-let botonFuego
-let botonAgua
-let botonTierra
-let botonReiniciar
+//html divs
+const divAtaques = document.getElementById("div-ataques")
+const mensajesJugador = document.getElementById("mensajes-jugador")
+const mensajesEnemigo = document.getElementById("mensajes-enemigo")
 
+//html ps
+const pResultado = document.getElementById("resultado")
 
-function startGame() {
+//html spans
+const vidasJugadorSpan = document.getElementById("vidas-jugador")
+const vidasEnemigoSpan = document.getElementById("vidas-enemigo")
 
-    //Gets html element to global variables
-    seccionSeleccionMastoca = document.getElementById("seccion-seleccion-mascota")
-    seccionSeleccionAtaque = document.getElementById("seccion-seleccion-ataque")
-    seccionMascotas = document.getElementById("seccion-mascota")
-    seccionGameScreen = document.getElementById("game-screen")
-    divResultado = document.getElementById("resultado")
-    mensajesJugador = document.getElementById("mensajes-jugador")
-    mensajesEnemigo = document.getElementById("mensajes-enemigo")
+//html buttons
+const botonMascota = document.getElementById("boton-mascota")
+const botonFuego = document.getElementById("boton-fuego")
+const botonAgua = document.getElementById("boton-agua")
+const botonTierra = document.getElementById("boton-tierra")
+const botonReiniciar = document.getElementById("boton-reiniciar")
 
-    botonMascota = document.getElementById("boton-mascota")
-    botonFuego = document.getElementById("boton-fuego")
-    botonAgua = document.getElementById("boton-agua")
-    botonTierra = document.getElementById("boton-tierra")
-    botonReiniciar = document.getElementById("boton-reiniciar")
+//Adds functions to buttons
+botonMascota.addEventListener("click", seleccionarMascota)
+botonFuego.addEventListener("click", seleccionarFuego)
+botonAgua.addEventListener("click", seleccionarAgua)
+botonTierra.addEventListener("click", seleccionarTierra)
+botonReiniciar.addEventListener("click", reiniciarJuego)
 
-    //Adds functions to buttons
-    botonMascota.addEventListener("click", seleccionarMascota)
-    botonFuego.addEventListener("click", seleccionarFuego)
-    botonAgua.addEventListener("click", seleccionarAgua)
-    botonTierra.addEventListener("click", seleccionarTierra)
-    botonReiniciar.addEventListener("click", reiniciarJuego)
+class Mokepon {
+    constructor(nombre, foto, vida){
+        this.nombre = nombre
+        this.foto = foto
+        this.vida = vida
+    }
 }
+
+let hipodoge = new Mokepon("Hipodoge", "./assets/mokepons_mokepon_hipodoge_attack.png", vida = 5)
+let capipepo = new Mokepon("Capipepo", "./assets/mokepons_mokepon_capipepo_attack.png", vida = 6)
+let ratigueya = new Mokepon("Capipepo", "./assets/mokepons_mokepon_capipepo_attack.png", vida = 6)
 
 function seleccionarMascota() {
     let inputHipodoge = document.getElementById("hipodoge")
@@ -71,8 +71,8 @@ function seleccionarMascota() {
 }
 
 function seleccionarMascotaEnemigo() {
-    seccionSeleccionMastoca.style.display = "none"
-    rng = aleatorio(1, 3)
+    sectionPetsScreen.style.display = "none"
+    let rng = aleatorio(1, 3)
     mascotaEnemigo = document.getElementById("mascota-enemigo")
     switch (rng) {
         case 1:
@@ -84,7 +84,7 @@ function seleccionarMascotaEnemigo() {
         case 3:
             mascotaEnemigo = "ratigueya"
     }
-    seccionGameScreen.style.display = "flex"
+    sectionGameScreen.style.display = "flex"
     agregarImagenesMascotas()
 }
 
@@ -137,7 +137,7 @@ function seleccionarTierra() {
 
 function seleccionarAtaqueEnemigo() {
     if (vidasEnemigo > 0 && vidasJugador > 0) {
-        rng = aleatorio(1, 3)
+        let rng = aleatorio(1, 3)
         switch (rng) {
             case 1:
                 ataqueEnemigo = "Fuego"
@@ -157,42 +157,40 @@ function seleccionarAtaqueEnemigo() {
 function crearMensajeCombate() {
     let parrafoJugador = document.createElement("p")
     let parrafoEnemigo = document.createElement("p")
-    resultado = combate()
+    let resultado = combate()
     parrafoJugador.innerHTML = "Ataque del jugador: " + ataqueJugador + "."
     parrafoEnemigo.innerHTML = "Ataque del enemigo: " + ataqueEnemigo + "."
     mensajesJugador.appendChild(parrafoJugador)
     mensajesEnemigo.appendChild(parrafoEnemigo)
-    divResultado.innerHTML = resultado
+    pResultado.innerHTML = resultado
     revisarVidas()
 }
 
 function combate() {
-    vidasJugadorSpan = document.getElementById("vidas-jugador")
-    vidasEnemigoSpan = document.getElementById("vidas-enemigo")
     let resultado
     if (ataqueJugador == ataqueEnemigo) {
         resultado = "EMPATE"
-        divResultado.style.background = "darkgrey"
+        pResultado.style.background = "darkgrey"
     } else if (ataqueJugador == "Fuego" && ataqueEnemigo == "Agua") {
         vidasEnemigo--
         vidasEnemigoSpan.innerHTML = vidasEnemigo
         resultado = "¡GANASTE!"
-        divResultado.style.background = "lightgreen"
+        pResultado.style.background = "lightgreen"
     } else if (ataqueJugador == "Agua" && ataqueEnemigo == "Tierra") {
         vidasEnemigo--
         vidasEnemigoSpan.innerHTML = vidasEnemigo
         resultado = "¡GANASTE!"
-        divResultado.style.background = "lightgreen"
+        pResultado.style.background = "lightgreen"
     } else if (ataqueJugador == "Tierra" && ataqueEnemigo == "Fuego") {
         vidasEnemigo--
         vidasEnemigoSpan.innerHTML = vidasEnemigo
         resultado = "¡GANASTE!"
-        divResultado.style.background = "lightgreen"
+        pResultado.style.background = "lightgreen"
     } else {
         vidasJugador--
         vidasJugadorSpan.innerHTML = vidasJugador
         resultado = "PERDISTE"
-        divResultado.style.background = "indianred"
+        pResultado.style.background = "indianred"
     }
     return resultado
 }
@@ -218,9 +216,9 @@ function revisarVidas(){
 }
 
 function crearMensajeFinal(resultado){
-    divResultado.innerHTML = resultado
+    pResultado.innerHTML = resultado
     botonReiniciar.style.display =""
-    seccionSeleccionAtaque.style.display="none"
+    divAtaques.style.display="none"
 }
 
 function reiniciarJuego(){
@@ -230,5 +228,3 @@ function reiniciarJuego(){
 function aleatorio(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min)
 }
-
-window.addEventListener("load", startGame)
