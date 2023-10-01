@@ -58,12 +58,6 @@ input:checked+label{
     margin: 12px;
 }
 
-.div-tarjetas-mokepones{
-    display: flex;
-    gap: 10px;
-    margin: 12px;
-}
-
 .tarjeta-mokepon {
     width: 216px;
     height: 132px;
@@ -115,6 +109,12 @@ input:checked+label{
 button:hover{
     border: 4px solid black;
     border-radius: 20px;
+}
+
+#div-tarjetas{
+    display: flex;
+    gap: 10px;
+    margin: 12px;
 }
 
 #boton-tierra{

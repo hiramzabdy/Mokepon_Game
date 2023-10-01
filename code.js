@@ -5,30 +5,28 @@ let vidasJugador = 3
 let vidasEnemigo = 3
 let mascotaJugador
 let mascotaEnemigo
-
+//mokepones
+let mokepones = []
+let htmlMokepones
 //html sections
 const sectionPetsScreen = document.getElementById("pets-screen")
 const sectionGameScreen = document.getElementById("game-screen")
-
 //html divs
+const divTarjetas = document.getElementById("div-tarjetas")
 const divAtaques = document.getElementById("div-ataques")
 const mensajesJugador = document.getElementById("mensajes-jugador")
 const mensajesEnemigo = document.getElementById("mensajes-enemigo")
-
 //html ps
 const pResultado = document.getElementById("resultado")
-
 //html spans
 const vidasJugadorSpan = document.getElementById("vidas-jugador")
 const vidasEnemigoSpan = document.getElementById("vidas-enemigo")
-
 //html buttons
 const botonMascota = document.getElementById("boton-mascota")
 const botonFuego = document.getElementById("boton-fuego")
 const botonAgua = document.getElementById("boton-agua")
 const botonTierra = document.getElementById("boton-tierra")
 const botonReiniciar = document.getElementById("boton-reiniciar")
-
 //Adds functions to buttons
 botonMascota.addEventListener("click", seleccionarMascota)
 botonFuego.addEventListener("click", seleccionarFuego)
@@ -37,16 +35,65 @@ botonTierra.addEventListener("click", seleccionarTierra)
 botonReiniciar.addEventListener("click", reiniciarJuego)
 
 class Mokepon {
-    constructor(nombre, foto, vida){
+    constructor(nombre, imagen, miniatura, vida){
         this.nombre = nombre
-        this.foto = foto
+        this.imagen = imagen
+        this.miniatura = miniatura
         this.vida = vida
+        this.ataques = []
     }
 }
 
-let hipodoge = new Mokepon("Hipodoge", "./assets/mokepons_mokepon_hipodoge_attack.png", vida = 5)
-let capipepo = new Mokepon("Capipepo", "./assets/mokepons_mokepon_capipepo_attack.png", vida = 6)
-let ratigueya = new Mokepon("Capipepo", "./assets/mokepons_mokepon_capipepo_attack.png", vida = 6)
+function startGame(){
+
+    crearMokepones()
+    estructurarMokepones()
+
+}
+
+function crearMokepones(){
+    let hipodoge = new Mokepon("Hipodoge", "./assets/mokepones/hipodoge.png", "./assets/thumbnails/hipodoge.png", vida = 5)
+    let capipepo = new Mokepon("Capipepo", "./assets/mokepones/capipepo.png", "./assets/thumbnails/capipepo.png", vida = 5)
+    let ratigueya = new Mokepon("Ratigueya", "./assets/mokepones/ratigueya.png", "./assets/thumbnails/ratigueya.png", vida = 5)
+    
+    /*hipodoge.ataques.push(
+        {nombre: "💧", id: "boton-agua"},
+        {nombre: "💧", id: "boton-agua"},
+        {nombre: "💧", id: "boton-agua"},
+        {nombre: "🔥", id: "boton-fuego"},
+        {nombre: "🌱", id: "boton-tierra"}
+    )
+    capipepo.ataques.push(
+        {nombre: "🌱", id: "boton-tierra"},
+        {nombre: "🌱", id: "boton-tierra"},
+        {nombre: "🌱", id: "boton-tierra"},
+        {nombre: "🔥", id: "boton-fuego"},
+        {nombre: "💧", id: "boton-agua"}
+    )
+    ratigueya.ataques.push(
+        {nombre: "🔥", id: "boton-fuego"},
+        {nombre: "🔥", id: "boton-fuego"},
+        {nombre: "🔥", id: "boton-fuego"},
+        {nombre: "💧", id: "boton-agua"},
+        {nombre: "🌱", id: "boton-tierra"}
+    )*/
+
+    mokepones.push(hipodoge, capipepo, ratigueya)
+}
+
+function estructurarMokepones(){
+
+    mokepones.forEach((mokepon) => {
+        htmlMokepones = `
+        <input type="radio" , name="mascota" , id=${mokepon.nombre}/>
+        <label for=${mokepon.nombre} , class="tarjeta-mokepon">
+            <p>${mokepon.nombre}</p>
+            <img src="${mokepon.imagen}" alt="Imagen de ${mokepon.nombre}">
+        </label>
+        `
+        divTarjetas.innerHTML += htmlMokepones
+    })
+}
 
 function seleccionarMascota() {
     let inputHipodoge = document.getElementById("hipodoge")
@@ -228,3 +275,5 @@ function reiniciarJuego(){
 function aleatorio(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min)
 }
+
+window.addEventListener("load", startGame)
