@@ -52,9 +52,9 @@ function startGame(){
 }
 
 function crearMokepones(){
-    let hipodoge = new Mokepon("Hipodoge", "./assets/mokepones/hipodoge.png", "./assets/thumbnails/hipodoge.png", vida = 5)
-    let capipepo = new Mokepon("Capipepo", "./assets/mokepones/capipepo.png", "./assets/thumbnails/capipepo.png", vida = 5)
-    let ratigueya = new Mokepon("Ratigueya", "./assets/mokepones/ratigueya.png", "./assets/thumbnails/ratigueya.png", vida = 5)
+    let hipodoge = new Mokepon("hipodoge", "./assets/mokepones/hipodoge.png", "./assets/thumbnails/hipodoge.png", vida = 5)
+    let capipepo = new Mokepon("capipepo", "./assets/mokepones/capipepo.png", "./assets/thumbnails/capipepo.png", vida = 5)
+    let ratigueya = new Mokepon("ratigueya", "./assets/mokepones/ratigueya.png", "./assets/thumbnails/ratigueya.png", vida = 5)
     
     /*hipodoge.ataques.push(
         {nombre: "💧", id: "boton-agua"},
@@ -85,7 +85,7 @@ function estructurarMokepones(){
 
     mokepones.forEach((mokepon) => {
         htmlMokepones = `
-        <input type="radio" , name="mascota" , id=${mokepon.nombre}/>
+        <input type="radio" , name="mascota" , id=${mokepon.nombre} />
         <label for=${mokepon.nombre} , class="tarjeta-mokepon">
             <p>${mokepon.nombre}</p>
             <img src="${mokepon.imagen}" alt="Imagen de ${mokepon.nombre}">
@@ -101,15 +101,15 @@ function seleccionarMascota() {
     let inputRatigueya = document.getElementById("ratigueya")
 
     if (inputHipodoge.checked) {
-        mascotaJugador = "hipodoge"
+        mascotaJugador = inputHipodoge.id
         botonMascota.disabled = true
         seleccionarMascotaEnemigo()
     } else if (inputCapipepo.checked) {
-        mascotaJugador = "capipepo"
+        mascotaJugador = inputCapipepo.id
         botonMascota.disabled = true
         seleccionarMascotaEnemigo()
     } else if (inputRatigueya.checked) {
-        mascotaJugador = "ratigueya"
+        mascotaJugador = inputRatigueya.id
         botonMascota.disabled = true
         seleccionarMascotaEnemigo()
     } else {
@@ -141,29 +141,29 @@ function agregarImagenesMascotas(){
 
     switch(mascotaJugador){
         case "hipodoge":
-            miniaturaJugador.src = "./assets/hipodoge.png"
+            miniaturaJugador.src = "./assets/thumbnails/hipodoge.png"
             miniaturaJugador.alt = "Miniatura hipodoge"
             break
         case "capipepo":
-            miniaturaJugador.src = "./assets/capipepo.png"
+            miniaturaJugador.src = "./assets/thumbnails/capipepo.png"
             miniaturaJugador.alt = "Miniatura capipepo"
             break        
         case "ratigueya":
-            miniaturaJugador.src = "./assets/ratigueya.png"
+            miniaturaJugador.src = "./assets/thumbnails/ratigueya.png"
             miniaturaJugador.alt = "Miniatura ratigueya"
             break                
     }
     switch(mascotaEnemigo){
         case "hipodoge":
-            miniaturaEnemigo.src = "./assets/hipodoge.png"
+            miniaturaEnemigo.src = "./assets/thumbnails/hipodoge.png"
             miniaturaEnemigo.alt = "Miniatura hipodoge"
             break
         case "capipepo":
-            miniaturaEnemigo.src = "./assets/capipepo.png"
+            miniaturaEnemigo.src = "./assets/thumbnails/capipepo.png"
             miniaturaEnemigo.alt = "Miniatura capipepo"
             break        
         case "ratigueya":
-            miniaturaEnemigo.src = "./assets/ratigueya.png"
+            miniaturaEnemigo.src = "./assets/thumbnails/ratigueya.png"
             miniaturaEnemigo.alt = "Miniatura ratigueya"
             break                
     }
