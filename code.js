@@ -1,6 +1,8 @@
 //game global variables
-let ataqueEnemigo
 let ataqueJugador
+let ataquesJugador = []
+let ataqueEnemigo
+let ataquesEnemigo = []
 let vidasJugador = 3
 let vidasEnemigo = 3
 let mascotaJugador
@@ -24,15 +26,12 @@ const vidasJugadorSpan = document.getElementById("vidas-jugador")
 const vidasEnemigoSpan = document.getElementById("vidas-enemigo")
 //html buttons
 const botonMascota = document.getElementById("boton-mascota")
-const botonFuego = document.getElementById("boton-fuego")
-const botonAgua = document.getElementById("boton-agua")
-const botonTierra = document.getElementById("boton-tierra")
 const botonReiniciar = document.getElementById("boton-reiniciar")
 botonMascota.addEventListener("click", seleccionarMascota)
-/*botonFuego.addEventListener("click", seleccionarFuego)
-botonAgua.addEventListener("click", seleccionarAgua)
-botonTierra.addEventListener("click", seleccionarTierra)*/
 botonReiniciar.addEventListener("click", reiniciarJuego)
+//botones de ataque
+let botonesAtaques = []
+
 
 class Mokepon {
     constructor(nombre, imagen, miniatura, vida){
@@ -110,20 +109,9 @@ function seleccionarMascota() {
     })
     if (mokeponReady){
         seleccionarMascotaEnemigo()
-        mostrarAtaques()
     }else{
         alert("No seas gey!")
     }
-
-}
-
-function mostrarAtaques(){
-    ataques = mascotaJugador.ataques
-    ataques.forEach(ataque => {
-      divAtaques.innerHTML += `
-      <button id="${ataque.id}" class="boton-ataque">${ataque.nombre}</button>
-      `  
-    })
 
 }
 
@@ -138,56 +126,54 @@ function seleccionarMascotaEnemigo() {
 function agregarImagenesMascotas(){
     let miniaturaJugador = document.getElementById("miniatura-jugador")
     let miniaturaEnemigo = document.getElementById("miniatura-enemigo")
-
     miniaturaJugador.src = mascotaJugador.miniatura
     miniaturaJugador.alt = mascotaJugador.nombre
-
     miniaturaEnemigo.src = mascotaEnemigo.miniatura
     miniaturaEnemigo.alt = mascotaEnemigo.nombre
+    mostrarAtaques()
 }
 
-function seleccionarFuego() {
-    ataqueJugador = "Fuego"
-    seleccionarAtaqueEnemigo()
+function mostrarAtaques(){
+    ataques = mascotaJugador.ataques
+    ataques.forEach(ataque => {
+      divAtaques.innerHTML += `
+      <button class="boton-ataque">${ataque.nombre}</button>
+      `  
+    })
+    botonesAtaques = document.querySelectorAll(".boton-ataque")
+    seleccionarAtaques()
 }
-function seleccionarAgua() {
-    ataqueJugador = "Agua"
-    seleccionarAtaqueEnemigo()
-}
-function seleccionarTierra() {
-    ataqueJugador = "Tierra"
-    seleccionarAtaqueEnemigo()
+
+function seleccionarAtaques(){
+    botonesAtaques.forEach(boton => {
+        boton.addEventListener("click", (e) => {
+            ataquesJugador.push(e.target.textContent)
+            ataqueJugador = e.target.textContent
+            boton.style.background = "#112f58"
+            boton.disabled = true
+            seleccionarAtaqueEnemigo()
+        })
+    });
 }
 
 function seleccionarAtaqueEnemigo() {
-    if (vidasEnemigo > 0 && vidasJugador > 0) {
-        let rng = aleatorio(1, 3)
-        switch (rng) {
-            case 1:
-                ataqueEnemigo = "Fuego"
-                break
-            case 2:
-                ataqueEnemigo = "Agua"
-                break
-            case 3:
-                ataqueEnemigo = "Tierra"
-        }
-        crearMensajeCombate()
-    } else {
-        alert("El juego ha terminado!")
-    }
+    rng = aleatorio(0, [mascotaEnemigo.ataques.length -1])
+    ataqueEnemigo = mascotaEnemigo.ataques[rng].nombre
+    ataquesEnemigo.push(ataqueEnemigo)
+    mascotaEnemigo.ataques.splice(rng, 1)
+    crearMensajeCombate()
 }
 
 function crearMensajeCombate() {
     let parrafoJugador = document.createElement("p")
     let parrafoEnemigo = document.createElement("p")
     let resultado = combate()
-    parrafoJugador.innerHTML = "Ataque del jugador: " + ataqueJugador + "."
-    parrafoEnemigo.innerHTML = "Ataque del enemigo: " + ataqueEnemigo + "."
+    parrafoJugador.innerHTML = "Ataque del jugador: " + ataqueJugador
+    parrafoEnemigo.innerHTML = "Ataque del enemigo: " + ataqueEnemigo
     mensajesJugador.appendChild(parrafoJugador)
     mensajesEnemigo.appendChild(parrafoEnemigo)
     pResultado.innerHTML = resultado
-    revisarVidas()
+    revisarAtaquesRestantes()
 }
 
 function combate() {
@@ -219,30 +205,35 @@ function combate() {
     return resultado
 }
 
-function revisarVidas(){
+function revisarAtaquesRestantes(){
+    if (vidasJugador != 0 || vidasEnemigo != 0){
+        if (mascotaEnemigo.ataques.length == 0){
+            if (vidasJugador > vidasEnemigo){
+                crearMensajeFinal("Ganaste el juego")
+                pResultado.style.background = "lightgreen"
+            }else if (vidasJugador < vidasEnemigo){
+                crearMensajeFinal("Perdiste el juego")
+                pResultado.style.background = "indianred"
+            }else if (vidasJugador == vidasEnemigo){
+                crearMensajeFinal("Empataste el juego")
+                pResultado.style.background = "darkgrey"
+            }
+        }
+    }
     if (vidasJugador == 0){
         crearMensajeFinal("¡PERDISTE EL JUEGO!")
-        let botonFuego = document.getElementById("boton-fuego")
-        botonFuego.disabled = true
-        let botonAgua = document.getElementById("boton-agua")
-        botonAgua.disabled = true
-        let botonTierra = document.getElementById("boton-tierra")
-        botonTierra.disabled = true
     }else if (vidasEnemigo == 0){
         crearMensajeFinal("¡GANASTE EL JUEGO!")
-        let botonFuego = document.getElementById("boton-fuego")
-        botonFuego.disabled = true
-        let botonAgua = document.getElementById("boton-agua")
-        botonAgua.disabled = true
-        let botonTierra = document.getElementById("boton-tierra")
-        botonTierra.disabled = true
     }
 }
 
 function crearMensajeFinal(resultado){
+    botonesAtaques.forEach(boton => {
+        boton.style.background = "#112f58"
+        boton.disabled = true
+    });
     pResultado.innerHTML = resultado
     botonReiniciar.style.display =""
-    divAtaques.style.display="none"
 }
 
 function reiniciarJuego(){
