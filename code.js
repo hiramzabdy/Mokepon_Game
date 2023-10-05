@@ -181,17 +181,17 @@ function combate() {
     if (ataqueJugador == ataqueEnemigo) {
         resultado = "EMPATE"
         pResultado.style.background = "darkgrey"
-    } else if (ataqueJugador == "Fuego" && ataqueEnemigo == "Agua") {
+    } else if (ataqueJugador == "Fuego 🔥" && ataqueEnemigo == "Tierra 🌱") {
         vidasEnemigo--
         vidasEnemigoSpan.innerHTML = vidasEnemigo
         resultado = "¡GANASTE!"
         pResultado.style.background = "lightgreen"
-    } else if (ataqueJugador == "Agua" && ataqueEnemigo == "Tierra") {
+    } else if (ataqueJugador == "Agua 💧" && ataqueEnemigo == "Fuego 🔥") {
         vidasEnemigo--
         vidasEnemigoSpan.innerHTML = vidasEnemigo
         resultado = "¡GANASTE!"
         pResultado.style.background = "lightgreen"
-    } else if (ataqueJugador == "Tierra" && ataqueEnemigo == "Fuego") {
+    } else if (ataqueJugador == "Tierra 🌱" && ataqueEnemigo == "Agua 💧") {
         vidasEnemigo--
         vidasEnemigoSpan.innerHTML = vidasEnemigo
         resultado = "¡GANASTE!"
