@@ -22,6 +22,7 @@ const mensajesEnemigo = document.getElementById("mensajes-enemigo")
 //html ps and canvas
 const pResultado = document.getElementById("resultado")
 const mokeMap = document.getElementById("mapa")
+const lienzo = mokeMap.getContext("2d")
 //html spans
 const vidasJugadorSpan = document.getElementById("vidas-jugador")
 const vidasEnemigoSpan = document.getElementById("vidas-enemigo")
@@ -31,6 +32,7 @@ const botonReiniciar = document.getElementById("boton-reiniciar")
 botonMascota.addEventListener("click", seleccionarMascota)
 botonReiniciar.addEventListener("click", reiniciarJuego)
 
+let imagenMascotaJugador
 
 class Mokepon {
     constructor(nombre, imagen, miniatura, vida, attackCount){
@@ -71,7 +73,6 @@ function crearMokepones(){
 }
 
 function estructurarMokepones(){
-
     mokepones.forEach((mokepon) => {
         htmlMokepones = `
         <input type="radio" , name="mascota" , id=${mokepon.nombre} />
@@ -89,7 +90,6 @@ function estructurarMokepones(){
 }
 
 function seleccionarMascota() {
-
     let mokeponReady = false
     i=0
     inputsMokepones.forEach((mokeponInput) => {    
@@ -102,17 +102,27 @@ function seleccionarMascota() {
     if (mokeponReady){
         seleccionarMascotaEnemigo()
     }else{
-        alert("No seas gey!")
+        alert("Selecciona tu mascota!")
     }
-
 }
 
 function seleccionarMascotaEnemigo() {
     sectionPetsScreen.style.display = "none"
     let rng = aleatorio(0, mokepones.length -1)
     mascotaEnemigo = mokepones[rng]
-    sectionGameScreen.style.display = "flex"
-    agregarImagenesMascotas()
+    //agregarImagenesMascotas()
+    mostrarMapa()
+}
+
+function mostrarMapa(){
+    sectionMapScreen.style.display = "flex" 
+    imagenMascotaJugador = new Image()
+    imagenMascotaJugador.src = mascotaJugador.imagen
+    imagenMascotaJugador.alt = "Mascota Jugador"
+    lienzo.drawImage(
+        imagenMascotaJugador,
+        0,0,80,80
+    )
 }
 
 function agregarImagenesMascotas(){
@@ -122,6 +132,7 @@ function agregarImagenesMascotas(){
     miniaturaJugador.alt = mascotaJugador.nombre
     miniaturaEnemigo.src = mascotaEnemigo.miniatura
     miniaturaEnemigo.alt = mascotaEnemigo.nombre
+    sectionGameScreen.style.display = "flex"
     mostrarAtaques()
 }
 

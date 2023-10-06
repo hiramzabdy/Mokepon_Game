@@ -114,11 +114,9 @@ input:checked+label{
 .boton-tierra{
     background-color: darkgreen;
 }
-
 .boton-agua{
     background-color: cornflowerblue;
 }
-
 .boton-fuego{
     background-color: darkred;
 }
@@ -160,6 +158,12 @@ input:checked+label{
     border: 2px solid;
     border-radius: 20px;
     margin: 16px;
+}
+
+#mapa{
+    border: 2px solid white;
+    height: 500px;
+    width: 500px;
 }
 
 @media (max-width: 720px) {
