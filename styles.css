@@ -25,6 +25,11 @@ button{
     font-size: 20px;
 }
 
+button:hover{
+    border: 4px solid black;
+    border-radius: 20px;
+}
+
 input{
     display: none;
 }
@@ -106,27 +111,22 @@ input:checked+label{
     font-size: 16px;
 }
 
-button:hover{
-    border: 4px solid black;
-    border-radius: 20px;
+.boton-tierra{
+    background-color: darkgreen;
+}
+
+.boton-agua{
+    background-color: cornflowerblue;
+}
+
+.boton-fuego{
+    background-color: darkred;
 }
 
 #div-tarjetas{
     display: flex;
     gap: 10px;
     margin: 12px;
-}
-
-#boton-tierra{
-    background-color: darkgreen;
-}
-
-#boton-agua{
-    background-color: cornflowerblue;
-}
-
-#boton-fuego{
-    background-color: darkred;
 }
 
 #game-screen{

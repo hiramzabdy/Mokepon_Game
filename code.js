@@ -1,26 +1,27 @@
 //game global variables
 let ataqueJugador
-let ataquesJugador = []
 let ataqueEnemigo
-let ataquesEnemigo = []
-let vidasJugador = 3
-let vidasEnemigo = 3
 let mascotaJugador
 let mascotaEnemigo
+let vidasJugador = 3
+let vidasEnemigo = 3
+let botonesAtaques = []
 //mokepones
 let mokepones = []
 let inputsMokepones = []
 let htmlMokepones
 //html sections
 const sectionPetsScreen = document.getElementById("pets-screen")
+const sectionMapScreen = document.getElementById("map-screen")
 const sectionGameScreen = document.getElementById("game-screen")
 //html divs
 const divTarjetas = document.getElementById("div-tarjetas")
 const divAtaques = document.getElementById("div-ataques")
 const mensajesJugador = document.getElementById("mensajes-jugador")
 const mensajesEnemigo = document.getElementById("mensajes-enemigo")
-//html ps
+//html ps and canvas
 const pResultado = document.getElementById("resultado")
+const mokeMap = document.getElementById("mapa")
 //html spans
 const vidasJugadorSpan = document.getElementById("vidas-jugador")
 const vidasEnemigoSpan = document.getElementById("vidas-enemigo")
@@ -29,16 +30,15 @@ const botonMascota = document.getElementById("boton-mascota")
 const botonReiniciar = document.getElementById("boton-reiniciar")
 botonMascota.addEventListener("click", seleccionarMascota)
 botonReiniciar.addEventListener("click", reiniciarJuego)
-//botones de ataque
-let botonesAtaques = []
 
 
 class Mokepon {
-    constructor(nombre, imagen, miniatura, vida){
+    constructor(nombre, imagen, miniatura, vida, attackCount){
         this.nombre = nombre
         this.imagen = imagen
         this.miniatura = miniatura
         this.vida = vida
+        this.attackCount = attackCount
         this.ataques = []
     }
 }
@@ -49,33 +49,25 @@ function startGame(){
 }
 
 function crearMokepones(){
-    let hipodoge = new Mokepon("Hipodoge", "./assets/mokepones/hipodoge.png", "./assets/thumbnails/hipodoge.png", vida = 5)
-    let capipepo = new Mokepon("Capipepo", "./assets/mokepones/capipepo.png", "./assets/thumbnails/capipepo.png", vida = 5)
-    let ratigueya = new Mokepon("Ratigueya", "./assets/mokepones/ratigueya.png", "./assets/thumbnails/ratigueya.png", vida = 5)
-    
-    hipodoge.ataques.push(
-        {nombre: "Agua 💧", id: "boton-agua"},
-        {nombre: "Agua 💧", id: "boton-agua"},
-        {nombre: "Agua 💧", id: "boton-agua"},
-        {nombre: "Fuego 🔥", id: "boton-fuego"},
-        {nombre: "Tierra 🌱", id: "boton-tierra"}
-    )
-    capipepo.ataques.push(
-        {nombre: "Tierra 🌱", id: "boton-tierra"},
-        {nombre: "Tierra 🌱", id: "boton-tierra"},
-        {nombre: "Tierra 🌱", id: "boton-tierra"},
-        {nombre: "Fuego 🔥", id: "boton-fuego"},
-        {nombre: "Agua 💧", id: "boton-agua"}
-    )
-    ratigueya.ataques.push(
-        {nombre: "Fuego 🔥", id: "boton-fuego"},
-        {nombre: "Fuego 🔥", id: "boton-fuego"},
-        {nombre: "Fuego 🔥", id: "boton-fuego"},
-        {nombre: "Agua 💧", id: "boton-agua"},
-        {nombre: "Tierra 🌱", id: "boton-tierra"}
-    )
+    let hipodoge = new Mokepon("Hipodoge", "./assets/mokepones/hipodoge.png", "./assets/thumbnails/hipodoge.png", vida = 5, [1,3,1])
+    let capipepo = new Mokepon("Capipepo", "./assets/mokepones/capipepo.png", "./assets/thumbnails/capipepo.png", vida = 5, [1,1,3])
+    let ratigueya = new Mokepon("Ratigueya", "./assets/mokepones/ratigueya.png", "./assets/thumbnails/ratigueya.png", vida = 5, [3,1,1])
+    mokepones.push(hipodoge,capipepo,ratigueya)
 
-    mokepones.push(hipodoge, capipepo, ratigueya)
+    let listaAtaques = [{nombre: "Fuego 🔥", class: "boton-fuego"}, {nombre: "Agua 💧", class: "boton-agua"},{nombre: "Tierra 🌱", class: "boton-tierra"}]
+
+    //Adds atacks to mokepon acording to the attackCount
+    mokepones.forEach(mokepon => {
+        let ataquesMokepon = []
+        for (let index = 0; index < mokepon.attackCount.length; index++) {
+            const noAtaques = mokepon.attackCount[index];
+            for (let i = 0; i < noAtaques; i++) {
+                ataque = listaAtaques[index]
+                ataquesMokepon.push(ataque)
+            }
+        }
+        mokepon.ataques = ataquesMokepon
+    });
 }
 
 function estructurarMokepones(){
@@ -137,7 +129,7 @@ function mostrarAtaques(){
     ataques = mascotaJugador.ataques
     ataques.forEach(ataque => {
       divAtaques.innerHTML += `
-      <button class="boton-ataque">${ataque.nombre}</button>
+      <button class="boton-ataque ${ataque.class}">${ataque.nombre}</button>
       `  
     })
     botonesAtaques = document.querySelectorAll(".boton-ataque")
@@ -147,7 +139,6 @@ function mostrarAtaques(){
 function seleccionarAtaques(){
     botonesAtaques.forEach(boton => {
         boton.addEventListener("click", (e) => {
-            ataquesJugador.push(e.target.textContent)
             ataqueJugador = e.target.textContent
             boton.style.background = "#112f58"
             boton.disabled = true
@@ -159,7 +150,6 @@ function seleccionarAtaques(){
 function seleccionarAtaqueEnemigo() {
     rng = aleatorio(0, [mascotaEnemigo.ataques.length -1])
     ataqueEnemigo = mascotaEnemigo.ataques[rng].nombre
-    ataquesEnemigo.push(ataqueEnemigo)
     mascotaEnemigo.ataques.splice(rng, 1)
     crearMensajeCombate()
 }
@@ -173,7 +163,7 @@ function crearMensajeCombate() {
     mensajesJugador.appendChild(parrafoJugador)
     mensajesEnemigo.appendChild(parrafoEnemigo)
     pResultado.innerHTML = resultado
-    revisarAtaquesRestantes()
+    revisarVictoria()
 }
 
 function combate() {
@@ -205,7 +195,7 @@ function combate() {
     return resultado
 }
 
-function revisarAtaquesRestantes(){
+function revisarVictoria(){
     if (vidasJugador != 0 || vidasEnemigo != 0){
         if (mascotaEnemigo.ataques.length == 0){
             if (vidasJugador > vidasEnemigo){
