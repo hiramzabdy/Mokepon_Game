@@ -5,12 +5,11 @@ let mascotaJugador
 let mascotaEnemigo
 let vidasJugador = 3
 let vidasEnemigo = 3
-let botonesAtaques = []
-let intervalo
 //mokepones
 let mokepones = []
 let inputsMokepones = []
 let htmlMokepones
+let botonesAtaques = []
 //html sections
 const sectionPetsScreen = document.getElementById("pets-screen")
 const sectionMapScreen = document.getElementById("map-screen")
@@ -20,20 +19,22 @@ const divTarjetas = document.getElementById("div-tarjetas")
 const divAtaques = document.getElementById("div-ataques")
 const mensajesJugador = document.getElementById("mensajes-jugador")
 const mensajesEnemigo = document.getElementById("mensajes-enemigo")
-//html ps and canvas
+//html ps
 const pResultado = document.getElementById("resultado")
-const mokeMap = document.getElementById("mapa")
-const lienzo = mokeMap.getContext("2d")
 //html spans
 const vidasJugadorSpan = document.getElementById("vidas-jugador")
 const vidasEnemigoSpan = document.getElementById("vidas-enemigo")
 //html buttons
 const botonMascota = document.getElementById("boton-mascota")
 const botonReiniciar = document.getElementById("boton-reiniciar")
+//events listeners
 botonMascota.addEventListener("click", seleccionarMascota)
 botonReiniciar.addEventListener("click", reiniciarJuego)
-
-
+//canvas drawing
+const mokeMap = document.getElementById("mapa")
+const lienzo = mokeMap.getContext("2d")
+const mapBackground = new Image()
+mapBackground.src = "./assets/mokemap.png"
 
 class Mokepon {
     constructor(nombre, imagen, miniatura, vida, attackCount){
@@ -43,10 +44,9 @@ class Mokepon {
         this.vida = vida
         this.attackCount = attackCount
         this.ataques = []
-        
         //for canvas
-        this.height = 28
-        this.width = 28
+        this.height = 50
+        this.width = 50
         this.x = 0
         this.y = 0
         this.xSpeed = 0
@@ -54,7 +54,6 @@ class Mokepon {
         this.mapIcon = new Image()
         this.mapIcon.src = miniatura
         this.mapIcon.alt = nombre
-
     }
 }
 
@@ -129,17 +128,27 @@ function seleccionarMascotaEnemigo() {
 
 function mostrarMapa(){
     sectionMapScreen.style.display = "flex"
-    intervalo = setInterval(dibujarMascotaJugador, 50)
-    dibujarMascotaJugador()
+    mokeMap.width = 500
+    mokeMap.height = 500
     window.addEventListener("keydown", teclaMovimiento)
     window.addEventListener("keyup", detenerMascota)
+    intervalo = setInterval(dibujarMapa, 50)
 }
 
-function dibujarMascotaJugador(){
+function dibujarMapa(){
     mascotaJugador.x+=mascotaJugador.xSpeed
     mascotaJugador.y+=mascotaJugador.ySpeed
 
     lienzo.clearRect(0,0, mokeMap.width, mokeMap.height)
+
+    lienzo.drawImage(
+        mapBackground,
+        0,
+        0,
+        mokeMap.width,
+        mokeMap.height
+    )
+
     lienzo.drawImage(
         mascotaJugador.mapIcon,
         mascotaJugador.x,
@@ -166,23 +175,23 @@ function botonMovimiento(direction){
 }
 
 function teclaMovimiento(tecla){
-    switch (tecla.key) {
-        case "ArrowUp":
-            mascotaJugador.ySpeed = -5
-            break;
-        case "ArrowDown":
-            mascotaJugador.ySpeed = 5
-            break;
-        case "ArrowRight":
-            mascotaJugador.xSpeed = 5
-            break;
-        case "ArrowLeft":
-            mascotaJugador.xSpeed = -5
+
+    if(tecla.key == "ArrowUp" || tecla.key == "w"){
+        mascotaJugador.ySpeed = -5
+    }else if(tecla.key == "ArrowDown" || tecla.key == "s"){
+        mascotaJugador.ySpeed = 5
+    }else if(tecla.key == "ArrowRight" || tecla.key == "d"){
+        mascotaJugador.xSpeed = 5
+    }else if(tecla.key == "ArrowLeft" || tecla.key == "a"){
+        mascotaJugador.xSpeed = -5
     }
 }
 
 function detenerMascota(eje){
-    if(eje.key== "ArrowUp" || eje.key == "ArrowDown"){
+    if(eje == "button"){
+        mascotaJugador.ySpeed = 0
+        mascotaJugador.xSpeed = 0
+    }else if(eje.key== "ArrowUp" || eje.key == "ArrowDown" || eje.key== "w" || eje.key == "s"){
         mascotaJugador.ySpeed = 0
     }else{
         mascotaJugador.xSpeed = 0

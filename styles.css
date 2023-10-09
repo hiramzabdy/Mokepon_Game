@@ -164,7 +164,7 @@ input:checked+label{
 }
 
 #mapa{
-    border: 2px solid white;
+    border: 8px solid cadetblue;
     height: 500px;
     width: 500px;
     margin: 20px;
