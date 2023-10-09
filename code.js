@@ -32,7 +32,7 @@ const botonReiniciar = document.getElementById("boton-reiniciar")
 botonMascota.addEventListener("click", seleccionarMascota)
 botonReiniciar.addEventListener("click", reiniciarJuego)
 
-let imagenMascotaJugador
+let intervalo
 
 class Mokepon {
     constructor(nombre, imagen, miniatura, vida, attackCount){
@@ -42,6 +42,16 @@ class Mokepon {
         this.vida = vida
         this.attackCount = attackCount
         this.ataques = []
+        this.height = 28
+        this.width = 28
+        this.x = 0
+        this.y = 0
+        this.xSpeed = 0
+        this.ySpeed = 0
+        this.mapIcon = new Image()
+        this.mapIcon.src = miniatura
+        this.mapIcon.alt = nombre
+
     }
 }
 
@@ -116,13 +126,42 @@ function seleccionarMascotaEnemigo() {
 
 function mostrarMapa(){
     sectionMapScreen.style.display = "flex" 
-    imagenMascotaJugador = new Image()
-    imagenMascotaJugador.src = mascotaJugador.imagen
-    imagenMascotaJugador.alt = "Mascota Jugador"
+    dibujarPersonaje(mascotaJugador)
+    intervalo = setInterval(dibujarPersonaje, 50)
+}
+
+function dibujarPersonaje(){
+    mascotaJugador.x+=mascotaJugador.xSpeed
+    mascotaJugador.y+=mascotaJugador.ySpeed
+    lienzo.clearRect(0,0, mokeMap.width, mokeMap.height)
     lienzo.drawImage(
-        imagenMascotaJugador,
-        0,0,80,80
+        mascotaJugador.mapIcon,
+        mascotaJugador.x,
+        mascotaJugador.y,
+        mascotaJugador.height,
+        mascotaJugador.width
     )
+}
+
+function moverMascota(direction){
+    switch (direction) {
+        case "up":
+            mascotaJugador.ySpeed-=5
+            break;
+        case "down":
+            mascotaJugador.ySpeed+=5
+            break;
+        case "right":
+            mascotaJugador.xSpeed+=5
+            break;
+        case "left":
+            mascotaJugador.xSpeed-=5
+    }
+}
+
+function detenerMascota(){
+    mascotaJugador.xSpeed = 0
+    mascotaJugador.ySpeed = 0
 }
 
 function agregarImagenesMascotas(){
