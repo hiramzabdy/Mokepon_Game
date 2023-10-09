@@ -58,11 +58,6 @@ class Mokepon {
     }
 }
 
-function startGame(){
-    crearMokepones()
-    estructurarMokepones()
-}
-
 function crearMokepones(){
     let hipodoge = new Mokepon("Hipodoge", "./assets/mokepones/hipodoge.png", "./assets/thumbnails/hipodoge.png", vida = 5, [1,3,1])
     let capipepo = new Mokepon("Capipepo", "./assets/mokepones/capipepo.png", "./assets/thumbnails/capipepo.png", vida = 5, [1,1,3])
@@ -83,6 +78,8 @@ function crearMokepones(){
         }
         mokepon.ataques = ataquesMokepon
     });
+
+    estructurarMokepones()
 }
 
 function estructurarMokepones(){
@@ -96,26 +93,28 @@ function estructurarMokepones(){
         `
         divTarjetas.innerHTML += htmlMokepones
     })
-    mokepones.forEach((mokepon) => {
-        let idMokepon = document.getElementById(mokepon.nombre)
-        inputsMokepones.push(idMokepon)
+
+    mokepones.forEach((inputMokepon) => {
+        let mokepon = document.getElementById(inputMokepon.nombre)
+        inputsMokepones.push(mokepon)
     })
 }
 
 function seleccionarMascota() {
     let mokeponReady = false
     i=0
-    inputsMokepones.forEach((mokeponInput) => {    
-        if (mokeponInput.checked){
+
+    inputsMokepones.forEach((mokepon) => {    
+        if (mokepon.checked){
             mascotaJugador = mokepones[i]
             mokeponReady = true
+        }else{
+            i+=1
         }
-        i+=1
     })
+
     if (mokeponReady){
         seleccionarMascotaEnemigo()
-    }else{
-        alert("Selecciona tu mascota!")
     }
 }
 
@@ -123,21 +122,23 @@ function seleccionarMascotaEnemigo() {
     sectionPetsScreen.style.display = "none"
     let rng = aleatorio(0, mokepones.length -1)
     mascotaEnemigo = mokepones[rng]
-    //agregarImagenesMascotas()
     mostrarMapa()
 }
 
+// funciones para mapa
+
 function mostrarMapa(){
-    sectionMapScreen.style.display = "flex" 
-    dibujarPersonaje(mascotaJugador)
-    intervalo = setInterval(dibujarPersonaje, 250)
+    sectionMapScreen.style.display = "flex"
+    intervalo = setInterval(dibujarMascotaJugador, 50)
+    dibujarMascotaJugador()
     window.addEventListener("keydown", teclaMovimiento)
     window.addEventListener("keyup", detenerMascota)
 }
 
-function dibujarPersonaje(){
+function dibujarMascotaJugador(){
     mascotaJugador.x+=mascotaJugador.xSpeed
     mascotaJugador.y+=mascotaJugador.ySpeed
+
     lienzo.clearRect(0,0, mokeMap.width, mokeMap.height)
     lienzo.drawImage(
         mascotaJugador.mapIcon,
@@ -151,40 +152,44 @@ function dibujarPersonaje(){
 function botonMovimiento(direction){
     switch (direction) {
         case "up":
-            mascotaJugador.ySpeed-=5
+            mascotaJugador.ySpeed = -5
             break;
         case "down":
-            mascotaJugador.ySpeed+=5
+            mascotaJugador.ySpeed = 5
             break;
         case "right":
-            mascotaJugador.xSpeed+=5
+            mascotaJugador.xSpeed = 5
             break;
         case "left":
-            mascotaJugador.xSpeed-=5
+            mascotaJugador.xSpeed = -5
     }
 }
 
 function teclaMovimiento(tecla){
-    console.log(tecla)
     switch (tecla.key) {
         case "ArrowUp":
-            mascotaJugador.ySpeed-=5
+            mascotaJugador.ySpeed = -5
             break;
         case "ArrowDown":
-            mascotaJugador.ySpeed+=5
+            mascotaJugador.ySpeed = 5
             break;
         case "ArrowRight":
-            mascotaJugador.xSpeed+=5
+            mascotaJugador.xSpeed = 5
             break;
         case "ArrowLeft":
-            mascotaJugador.xSpeed-=5
+            mascotaJugador.xSpeed = -5
     }
 }
 
-function detenerMascota(){
-    mascotaJugador.xSpeed = 0
-    mascotaJugador.ySpeed = 0
+function detenerMascota(eje){
+    if(eje.key== "ArrowUp" || eje.key == "ArrowDown"){
+        mascotaJugador.ySpeed = 0
+    }else{
+        mascotaJugador.xSpeed = 0
+    }
 }
+
+// funciones para combate
 
 function agregarImagenesMascotas(){
     let miniaturaJugador = document.getElementById("miniatura-jugador")
@@ -306,4 +311,4 @@ function aleatorio(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
-window.addEventListener("load", startGame)
+window.addEventListener("load", crearMokepones)
