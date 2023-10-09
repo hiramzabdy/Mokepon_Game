@@ -6,6 +6,7 @@ let mascotaEnemigo
 let vidasJugador = 3
 let vidasEnemigo = 3
 let botonesAtaques = []
+let intervalo
 //mokepones
 let mokepones = []
 let inputsMokepones = []
@@ -32,7 +33,7 @@ const botonReiniciar = document.getElementById("boton-reiniciar")
 botonMascota.addEventListener("click", seleccionarMascota)
 botonReiniciar.addEventListener("click", reiniciarJuego)
 
-let intervalo
+
 
 class Mokepon {
     constructor(nombre, imagen, miniatura, vida, attackCount){
@@ -42,6 +43,8 @@ class Mokepon {
         this.vida = vida
         this.attackCount = attackCount
         this.ataques = []
+        
+        //for canvas
         this.height = 28
         this.width = 28
         this.x = 0
@@ -127,7 +130,9 @@ function seleccionarMascotaEnemigo() {
 function mostrarMapa(){
     sectionMapScreen.style.display = "flex" 
     dibujarPersonaje(mascotaJugador)
-    intervalo = setInterval(dibujarPersonaje, 50)
+    intervalo = setInterval(dibujarPersonaje, 250)
+    window.addEventListener("keydown", teclaMovimiento)
+    window.addEventListener("keyup", detenerMascota)
 }
 
 function dibujarPersonaje(){
@@ -143,7 +148,7 @@ function dibujarPersonaje(){
     )
 }
 
-function moverMascota(direction){
+function botonMovimiento(direction){
     switch (direction) {
         case "up":
             mascotaJugador.ySpeed-=5
@@ -155,6 +160,23 @@ function moverMascota(direction){
             mascotaJugador.xSpeed+=5
             break;
         case "left":
+            mascotaJugador.xSpeed-=5
+    }
+}
+
+function teclaMovimiento(tecla){
+    console.log(tecla)
+    switch (tecla.key) {
+        case "ArrowUp":
+            mascotaJugador.ySpeed-=5
+            break;
+        case "ArrowDown":
+            mascotaJugador.ySpeed+=5
+            break;
+        case "ArrowRight":
+            mascotaJugador.xSpeed+=5
+            break;
+        case "ArrowLeft":
             mascotaJugador.xSpeed-=5
     }
 }
