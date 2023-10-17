@@ -1,4 +1,5 @@
 //game global variables
+let jugadorId = null
 let ataqueJugador
 let ataqueEnemigo
 let mascotaJugador
@@ -71,6 +72,24 @@ class Mokepon {
     }
 }
 
+function iniciarJuego(){
+    crearMokepones()
+    unirseAlJuego()
+}
+
+function unirseAlJuego(){
+    fetch("http://localhost:8080/start")
+        .then(function(res){
+            if(res.ok){
+                res.text()
+                .then(function(respuesta){
+                    console.log(respuesta)
+                    jugadorId = respuesta
+                })
+            }
+        })
+}
+
 function crearMokepones(){
     let hipodoge = new Mokepon("Hipodoge", "./assets/mokepones/hipodoge.png", "./assets/thumbnails/hipodoge.png", vida = 5, [1,3,1])
     let capipepo = new Mokepon("Capipepo", "./assets/mokepones/capipepo.png", "./assets/thumbnails/capipepo.png", vida = 5, [1,1,3])
@@ -128,7 +147,22 @@ function seleccionarMascota() {
     if (mokeponReady){
         agregarAtaques(mascotaJugador)
         seleccionarMascotaEnemigo()
+        enviarMascotaBackend(mascotaJugador)
     }
+}
+
+function enviarMascotaBackend(mascotaJugador){
+    fetch(`http://localhost:8080/mokepon/${jugadorId}`, {
+        method: "post",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(
+            {
+                mokepon: mascotaJugador
+            }
+        )
+    })
 }
 
 function seleccionarMascotaEnemigo() {
@@ -364,4 +398,4 @@ function aleatorio(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
-window.addEventListener("load", crearMokepones)
+window.addEventListener("load", iniciarJuego)
