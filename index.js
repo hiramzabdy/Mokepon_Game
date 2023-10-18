@@ -61,11 +61,11 @@ class Mokepon {
         this.mapIcon.alt = nombre
     }
 
-    dibujarMascota(escala=1){
+    dibujarMascota(){
         lienzo.drawImage(
             this.mapIcon,
-            this.x/escala,
-            this.y/escala,
+            this.x,
+            this.y,
             this.height,
             this.width
         )
@@ -178,13 +178,31 @@ function mostrarMapa(){
     sectionMapScreen.style.display = "flex"
     window.addEventListener("keydown", teclaMovimiento)
     window.addEventListener("keyup", detenerMascota)
+    mokeMap.width = 500
+    mokeMap.height = 500
     intervalo = setInterval(dibujarMapa, 50)
+}
 
+function comprobarCoordenadas(){
+    if(mascotaJugador.x < mokeMap.width - mascotaJugador.width + 10){
+        mascotaJugador.x+=mascotaJugador.xSpeed
+    }else{
+        mascotaJugador.x = mokeMap.width - mascotaJugador.width
+    }
+    if(mascotaJugador.y < mokeMap.height - mascotaJugador.height + 10){
+        mascotaJugador.y+=mascotaJugador.ySpeed
+    }else{
+        mascotaJugador.y = mokeMap.height - mascotaJugador.height
+    }
+    if(mascotaJugador.x < 0){
+        mascotaJugador.x = 0
+    }
+    if(mascotaJugador.y < 0){
+        mascotaJugador.y = 0
+    }
 }
 
 function dibujarMapa(){
-    mokeMap.width = window.innerWidth/2
-    mokeMap.height = mokeMap.width
     if(mokeponesDispersos != true){
         mokepones.forEach(mokepon => {
             dispersarEnemigos(mokepon)
@@ -194,9 +212,9 @@ function dibujarMapa(){
     }
     mokepones.forEach(element => {
         toparseEnemigo(element)
-    });
-    mascotaJugador.x+=mascotaJugador.xSpeed
-    mascotaJugador.y+=mascotaJugador.ySpeed
+    })
+    comprobarCoordenadas()
+    //enviarCoordenadasBackend(mascotaJugador.x, mascotaJugador.y)
     lienzo.clearRect(0,0, mokeMap.width, mokeMap.height)
     lienzo.drawImage(
         mapBackground,
@@ -205,11 +223,25 @@ function dibujarMapa(){
         mokeMap.width,
         mokeMap.height
     )
-    escala = originalMapSize / mokeMap.width
     mokepones.forEach(mokepon => {
-        mokepon.dibujarMascota(escala)
+        mokepon.dibujarMascota()
     });
-    mascotaJugador.dibujarMascota(escala)
+    mascotaJugador.dibujarMascota()
+    console.log(mascotaJugador.x, mokeMap.width)
+}
+
+function enviarCoordenadasBackend(x,y){
+    fetch(`http://localhost:8080/mokepon/${jugadorId}/posicion`, {
+        method: "post",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            x,
+            y
+        })
+    })
+
 }
 
 function dispersarEnemigos(enemigo){
@@ -254,17 +286,17 @@ function botonMovimiento(direction){
 function teclaMovimiento(tecla){
 
     if(tecla.key == "ArrowUp" || tecla.key == "w"){
-        mascotaJugador.ySpeed = -5
+        mascotaJugador.ySpeed = -10
     }else if(tecla.key == "ArrowDown" || tecla.key == "s"){
-        mascotaJugador.ySpeed = 5
+        mascotaJugador.ySpeed = 10
     }else if(tecla.key == "ArrowRight" || tecla.key == "d"){
-        mascotaJugador.xSpeed = 5
+        mascotaJugador.xSpeed = 10
     }else if(tecla.key == "ArrowLeft" || tecla.key == "a"){
-        mascotaJugador.xSpeed = -5
+        mascotaJugador.xSpeed = -10
     }
 }
 
-function detenerMascota(eje){
+function detenerMascota(eje="button"){
     if(eje == "button"){
         mascotaJugador.ySpeed = 0
         mascotaJugador.xSpeed = 0
