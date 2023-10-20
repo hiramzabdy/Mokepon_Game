@@ -1,4 +1,5 @@
 //game global variables
+let jugador
 let jugadorId = null
 let ataqueJugador
 let ataqueEnemigo
@@ -8,6 +9,7 @@ let vidasJugador = 3
 let vidasEnemigo = 3
 let intervalo
 //mokepones
+let enemigosOnline = []
 let mokepones = []
 let inputsMokepones = []
 let htmlMokepones
@@ -40,6 +42,15 @@ const lienzo = mokeMap.getContext("2d")
 const mapBackground = new Image()
 mapBackground.src = "./assets/mokemap.png"
 let originalMapSize
+
+class Jugador {
+    constructor(id){
+        this.id = id
+    }
+    asignarMascota(mascota){
+        this.mascota = mascota
+    }
+}
 
 class Mokepon {
     constructor(nombre, imagen, miniatura, vida, attackCount){
@@ -85,6 +96,7 @@ function unirseAlJuego(){
                 .then(function(respuesta){
                     console.log(respuesta)
                     jugadorId = respuesta
+                    jugador = new Jugador(respuesta)
                 })
             }
         })
@@ -139,6 +151,7 @@ function seleccionarMascota() {
     inputsMokepones.forEach((mokepon) => {    
         if (mokepon.checked){
             mascotaJugador = new Mokepon(mokepones[i].nombre, mokepones[i].imagen, mokepones[i].miniatura, mokepones[i].vida, mokepones[i].attackCount)
+            jugador.asignarMascota(mascotaJugador)
             mokeponReady = true
         }else{
             i+=1
@@ -146,8 +159,9 @@ function seleccionarMascota() {
     })
     if (mokeponReady){
         agregarAtaques(mascotaJugador)
-        seleccionarMascotaEnemigo()
         enviarMascotaBackend(mascotaJugador)
+        sectionPetsScreen.style.display = "none"
+        mostrarMapa()
     }
 }
 
@@ -165,13 +179,6 @@ function enviarMascotaBackend(mascotaJugador){
     })
 }
 
-function seleccionarMascotaEnemigo() {
-    sectionPetsScreen.style.display = "none"
-    //let rng = aleatorio(0, mokepones.length -1)
-    //mascotaEnemigo = mokepones[rng]
-    mostrarMapa()
-}
-
 // funciones para mapa
 
 function mostrarMapa(){
@@ -183,7 +190,8 @@ function mostrarMapa(){
     intervalo = setInterval(dibujarMapa, 50)
 }
 
-function comprobarCoordenadas(){
+function comprobarBordes(){
+    //Prevents mokepon to go outer the map
     if(mascotaJugador.x < mokeMap.width - mascotaJugador.width + 10){
         mascotaJugador.x+=mascotaJugador.xSpeed
     }else{
@@ -204,17 +212,13 @@ function comprobarCoordenadas(){
 
 function dibujarMapa(){
     if(mokeponesDispersos != true){
-        mokepones.forEach(mokepon => {
-            dispersarEnemigos(mokepon)
-        });
+        dispersarEnemigos(mascotaJugador)
         mokeponesDispersos = true
-        originalMapSize = mokeMap.width
     }
-    mokepones.forEach(element => {
-        toparseEnemigo(element)
-    })
-    comprobarCoordenadas()
-    //enviarCoordenadasBackend(mascotaJugador.x, mascotaJugador.y)
+
+    //console.log(enemigosOnline)
+    comprobarBordes()
+
     lienzo.clearRect(0,0, mokeMap.width, mokeMap.height)
     lienzo.drawImage(
         mapBackground,
@@ -223,11 +227,13 @@ function dibujarMapa(){
         mokeMap.width,
         mokeMap.height
     )
-    mokepones.forEach(mokepon => {
-        mokepon.dibujarMascota()
+
+    enemigosOnline.forEach(enemigo => {
+        enemigo.mascota.dibujarMascota()
     });
+
+    enviarCoordenadasBackend(mascotaJugador.x, mascotaJugador.y)
     mascotaJugador.dibujarMascota()
-    console.log(mascotaJugador.x, mokeMap.width)
 }
 
 function enviarCoordenadasBackend(x,y){
@@ -241,7 +247,46 @@ function enviarCoordenadasBackend(x,y){
             y
         })
     })
+        .then(function(res) {
+            if(res.ok){
+                res.json()
+                    .then(function(res){
+                        filtrarEnemigos(res.enemigos)
+                    })
+            }
+        })
 
+}
+
+function filtrarEnemigos(enemigos){
+    enemigosFiltrados = []
+    enemigos.forEach(enemigo => {
+        if(enemigo.mascota != undefined){
+            enemigosFiltrados.push(enemigo)
+        }
+    });
+    crearMokeponOnline(enemigosFiltrados)
+}
+
+function crearMokeponOnline(listaEnemigosOnline){
+    let enemigosUnicos = []
+    listaEnemigosOnline.forEach(enemigoOnline => {
+        let enemigo = new Jugador (enemigoOnline.id)
+        let mascota
+        if(enemigoOnline.mascota.nombre == "Ratigueya"){
+            mascota = new Mokepon("Ratigueya", "./assets/mokepones/ratigueya.png", "./assets/thumbnails/ratigueya.png", vida = 5, [3,1,1])
+        }else if(enemigoOnline.mascota.nombre == "Capipepo"){
+            mascota = new Mokepon("Capipepo", "./assets/mokepones/capipepo.png", "./assets/thumbnails/capipepo.png", vida = 5, [1,1,3])
+        }else if(enemigoOnline.mascota.nombre == "Hipodoge"){
+            mascota = new Mokepon("Hipodoge", "./assets/mokepones/hipodoge.png", "./assets/thumbnails/hipodoge.png", vida = 5, [1,3,1])
+        }
+        agregarAtaques(mascota)
+        enemigo.asignarMascota(mascota)
+        enemigo.mascota.x = enemigoOnline.x
+        enemigo.mascota.y = enemigoOnline.y
+        enemigosUnicos.push(enemigo)
+    });
+    enemigosOnline = enemigosUnicos
 }
 
 function dispersarEnemigos(enemigo){
