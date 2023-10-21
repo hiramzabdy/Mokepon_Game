@@ -192,15 +192,15 @@ function mostrarMapa(){
 
 function comprobarBordes(){
     //Prevents mokepon to go outer the map
-    if(mascotaJugador.x < mokeMap.width - mascotaJugador.width + 10){
+    if(mascotaJugador.x < mokeMap.width - mascotaJugador.width){
         mascotaJugador.x+=mascotaJugador.xSpeed
-    }else{
-        mascotaJugador.x = mokeMap.width - mascotaJugador.width
+    }else if(mascotaJugador.xSpeed < 0){
+        mascotaJugador.x+=mascotaJugador.xSpeed
     }
-    if(mascotaJugador.y < mokeMap.height - mascotaJugador.height + 10){
+    if(mascotaJugador.y < mokeMap.height - mascotaJugador.height){
         mascotaJugador.y+=mascotaJugador.ySpeed
-    }else{
-        mascotaJugador.y = mokeMap.height - mascotaJugador.height
+    }else if(mascotaJugador.ySpeed < 0){
+        mascotaJugador.y+=mascotaJugador.ySpeed
     }
     if(mascotaJugador.x < 0){
         mascotaJugador.x = 0
@@ -215,10 +215,6 @@ function dibujarMapa(){
         dispersarEnemigos(mascotaJugador)
         mokeponesDispersos = true
     }
-
-    //console.log(enemigosOnline)
-    comprobarBordes()
-
     lienzo.clearRect(0,0, mokeMap.width, mokeMap.height)
     lienzo.drawImage(
         mapBackground,
@@ -228,12 +224,13 @@ function dibujarMapa(){
         mokeMap.height
     )
 
+    comprobarBordes()
+    mascotaJugador.dibujarMascota()
+    enviarCoordenadasBackend(mascotaJugador.x, mascotaJugador.y)
     enemigosOnline.forEach(enemigo => {
         enemigo.mascota.dibujarMascota()
+        toparseEnemigo(enemigo.mascota)
     });
-
-    enviarCoordenadasBackend(mascotaJugador.x, mascotaJugador.y)
-    mascotaJugador.dibujarMascota()
 }
 
 function enviarCoordenadasBackend(x,y){
