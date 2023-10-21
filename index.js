@@ -230,7 +230,7 @@ function dibujarMapa(){
     enemigosOnline.forEach(enemigo => {
         enemigo.mascota.dibujarMascota()
         toparseEnemigo(enemigo.mascota)
-    });
+    })
 }
 
 function enviarCoordenadasBackend(x,y){
@@ -292,21 +292,24 @@ function dispersarEnemigos(enemigo){
 }
 
 function toparseEnemigo(enemigo){
-    const arribaEnemigo = enemigo.y
-    const abajoEnemigo = enemigo.y + enemigo.height
-    const izquierdaEnemigo = enemigo.x
-    const derechaEnemigo = enemigo.x + enemigo.width
-    const abajoJugador = mascotaJugador.y + mascotaJugador.height
-    const arribaJugador = mascotaJugador.y
-    const derechaJugador = mascotaJugador.x + mascotaJugador.width
-    const izquierdaJugador = mascotaJugador.x
-    if(abajoJugador < arribaEnemigo || arribaJugador > abajoEnemigo || derechaJugador < izquierdaEnemigo || izquierdaJugador > derechaEnemigo){
-        return
+    if(enemigo.x != undefined){
+        const arribaEnemigo = enemigo.y
+        const abajoEnemigo = enemigo.y + enemigo.height
+        const izquierdaEnemigo = enemigo.x
+        const derechaEnemigo = enemigo.x + enemigo.width
+        const abajoJugador = mascotaJugador.y + mascotaJugador.height
+        const arribaJugador = mascotaJugador.y
+        const derechaJugador = mascotaJugador.x + mascotaJugador.width
+        const izquierdaJugador = mascotaJugador.x
+        if(abajoJugador < arribaEnemigo || arribaJugador > abajoEnemigo || derechaJugador < izquierdaEnemigo || izquierdaJugador > derechaEnemigo){
+            return
+        }
+        clearInterval(intervalo)
+        mascotaEnemigo = enemigo
+        agregarImagenesMascotas()
+        console.log(enemigo, mascotaJugador)
     }
-    clearInterval(intervalo)
-    //alert("Es hora de pelear!")
-    mascotaEnemigo = enemigo
-    agregarImagenesMascotas()
+
 }
 
 function botonMovimiento(direction){
