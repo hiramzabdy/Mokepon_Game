@@ -372,6 +372,7 @@ function mostrarAtaques(){
 }
 
 function seleccionarAtaques(){
+    let i = 0
     botonesAtaques.forEach(boton => {
         boton.addEventListener("click", (e) => {
             ataqueJugador = e.target.textContent
@@ -379,7 +380,26 @@ function seleccionarAtaques(){
             boton.disabled = true
             enviarAtaqueBackend()
         })
+        i += 1
     })
+    if(i == 5){
+        resultadoBatallaBackend()
+    }
+}
+
+function resultadoBatallaBackend(){
+    fetch(`http://localhost:8080/mokepon/:${jugador.id}/versus/:${enemigo.id}`)
+        .then(function(res){
+            if(res.ok){
+                res.json()
+                    .then(function(res){
+                        console.log(res)
+                        /*vidasJugador = res.jugador.vidas
+                        vidasEnemigo = res.enemigo.vidas
+                        revisarVictoria()*/
+                    })
+            }
+        })
 }
 
 function enviarAtaqueBackend(){
@@ -389,10 +409,10 @@ function enviarAtaqueBackend(){
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            ataque: ataqueJugador
+            ataque: ataqueJugador,
+            enemigo: enemigo
         })
     })
-        .then()
 }
 
 function seleccionarAtaqueEnemigo() {
