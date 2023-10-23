@@ -470,6 +470,8 @@ function revisarVictoria(res){
     console.log(res)
     vidasJugador = res.jugador.vidas
     vidasEnemigo = res.enemigo.vidas
+    vidasJugadorSpan.innerHTML = vidasJugador
+    vidasEnemigoSpan.innerHTML = vidasEnemigo
 
     if(vidasJugador <= 0){
         crearMensajeFinal("Perdiste el juego")
@@ -493,7 +495,25 @@ function crearMensajeFinal(resultado){
 }
 
 function reiniciarJuego(){
-    location.reload()
+    fetch("http://localhost:8080/eliminar", {
+        method: "post",
+        headers: {
+            "Content-Type": "Application/json"
+        },
+        body: JSON.stringify({
+            jugador: jugador
+        })
+    })
+        .then((res) => {
+            if(res.ok){
+                res.json()
+                    .then(function(res){
+                        console.log("enemigos", res)
+                        filtrarEnemigos(res.enemigos)
+                        mostrarMapa()
+                    })
+            }
+        })
 }
 
 function aleatorio(min, max) {

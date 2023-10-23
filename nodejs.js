@@ -30,24 +30,33 @@ class Mokepon {
     }
 }
 
-function batalla(jugador1, jugador2){
-    const jugadorUno = jugador1
-    const jugadorDos = jugador2
+function batallaSecuencial(jugador1, jugador2){
     for (let index = 0; index < jugador1.ataques.length; index++) {
-        const ataque1 = jugadorUno.ataques[index]
-        const ataque2 = jugadorDos.ataques[index]
-        if (ataque1 == "Fuego 🔥" && ataque2 == "Tierra 🌱") {
-            jugador2.vidas--
-        } else if (ataque1 == "Agua 💧" && ataque2 == "Fuego 🔥") {
-            jugador2.vidas--
-        } else if (ataque1 == "Tierra 🌱" && ataque2 == "Agua 💧") {
-            jugador2.vidas--
-        } else {
-            jugador1.vidas--
+        if(jugador1.vidas > 0 && jugador2.vidas > 0){
+            const ataque1 = jugador1.ataques[index]
+            const ataque2 = jugador2.ataques[index]
+            if (ataque1 == "Fuego 🔥" && ataque2 == "Tierra 🌱") {
+                jugador2.vidas--
+            } else if (ataque1 == "Agua 💧" && ataque2 == "Fuego 🔥") {
+                jugador2.vidas--
+            } else if (ataque1 == "Tierra 🌱" && ataque2 == "Agua 💧") {
+                jugador2.vidas--
+            } else {
+                jugador1.vidas--
+            }
         }
     }
-    jugadorUno.fought = true
-    jugadorDos.fought = true
+    jugador1.fought = true
+    jugador2.fought = true
+}
+
+function eliminarJugador(){
+    for (let index = 0; index < jugadores.length; index++) {
+        const element = jugadores[index]
+        if(element.vidas == 0){
+            jugadores.splice(index, 1)
+        }   
+    }
 }
 
 const jugadores = []
@@ -98,7 +107,7 @@ app.post("/mokepon/:jugadorId/ataque", (req, res) => {
     const enemigo = jugadores.find((jugador) => jugador.id == enemigoId)
     jugador.ataques.push(ataque)
     if(jugador.ataques.length == 5 && enemigo.ataques.length == 5){
-        batalla(jugador, enemigo)
+        batallaSecuencial(jugador, enemigo)
     }
     res.end()
 })
@@ -116,6 +125,18 @@ app.get("/mokepon/:jugadorId/versus/:enemigoId", (req, res) => {
     }else{
         res.send(false)
     }
+})
+
+app.post("/eliminar", (req, res) => {
+    eliminarJugador()
+    const jugadorId = req.body.jugador.id
+    const enemigos = jugadores.filter((jugador) => jugadorId != jugador.id)
+    res.send(
+        {
+            enemigos
+        }
+    )
+
 })
 
 app.listen(8080, () => {
