@@ -10,6 +10,7 @@ class Jugador {
         this.id = id
         this.ataques = []
         this.vidas = vidas
+        this.fought = false
     }
 
     asignarMascota(mokepon){
@@ -45,6 +46,8 @@ function batalla(jugador1, jugador2){
             jugador1.vidas--
         }
     }
+    jugadorUno.fought = true
+    jugadorDos.fought = true
 }
 
 const jugadores = []
@@ -105,10 +108,14 @@ app.get("/mokepon/:jugadorId/versus/:enemigoId", (req, res) => {
     const enemigoId = req.params.enemigoId
     const jugador = jugadores.find((jugador) => jugador.id == jugadorId)
     const enemigo = jugadores.find((jugador) => jugador.id == enemigoId)
-    res.send({
-        jugador,
-        enemigo
-    })
+    if(jugador.fought && enemigo.fought){
+        res.send({
+            jugador: jugador,
+            enemigo: enemigo
+        })
+    }else{
+        res.send(false)
+    }
 })
 
 app.listen(8080, () => {

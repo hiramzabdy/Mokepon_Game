@@ -383,20 +383,22 @@ function seleccionarAtaques(){
         i += 1
     })
     if(i == 5){
-        resultadoBatallaBackend()
+        intervaloResultado = setInterval(resultadoBatallaBackend, 1000)
     }
 }
 
 function resultadoBatallaBackend(){
-    fetch(`http://localhost:8080/mokepon/:${jugador.id}/versus/:${enemigo.id}`)
+    fetch(`http://localhost:8080/mokepon/${jugador.id}/versus/${enemigo.id}`)
         .then(function(res){
             if(res.ok){
                 res.json()
                     .then(function(res){
-                        console.log(res)
-                        /*vidasJugador = res.jugador.vidas
-                        vidasEnemigo = res.enemigo.vidas
-                        revisarVictoria()*/
+                        if(res != []){
+                            if(res){
+                                console.log(res)
+                                revisarVictoria(res)
+                            }
+                        }
                     })
             }
         })
@@ -463,25 +465,21 @@ function combate() {
     return resultado
 }
 
-function revisarVictoria(){
-    if (vidasJugador != 0 || vidasEnemigo != 0){
-        if (enemigo.mascota.ataques.length == 0){
-            if (vidasJugador > vidasEnemigo){
-                crearMensajeFinal("Ganaste el juego")
-                pResultado.style.background = "lightgreen"
-            }else if (vidasJugador < vidasEnemigo){
-                crearMensajeFinal("Perdiste el juego")
-                pResultado.style.background = "indianred"
-            }else if (vidasJugador == vidasEnemigo){
-                crearMensajeFinal("Empataste el juego")
-                pResultado.style.background = "darkgrey"
-            }
-        }
-    }
-    if (vidasJugador == 0){
-        crearMensajeFinal("¡PERDISTE EL JUEGO!")
-    }else if (vidasEnemigo == 0){
-        crearMensajeFinal("¡GANASTE EL JUEGO!")
+function revisarVictoria(res){
+    clearInterval(intervaloResultado)
+    console.log(res)
+    vidasJugador = res.jugador.vidas
+    vidasEnemigo = res.enemigo.vidas
+
+    if(vidasJugador <= 0){
+        crearMensajeFinal("Perdiste el juego")
+        pResultado.style.background = "indianred"
+    }else if(vidasJugador > 0 && vidasJugador == vidasEnemigo){
+        crearMensajeFinal("Empataste el juego")
+        pResultado.style.background = "darkgrey"
+    }else{
+        crearMensajeFinal("Ganaste el juego")
+        pResultado.style.background = "darkgreen"
     }
 }
 
