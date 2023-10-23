@@ -130,13 +130,16 @@ app.get("/mokepon/:jugadorId/versus/:enemigoId", (req, res) => {
 app.post("/eliminar", (req, res) => {
     eliminarJugador()
     const jugadorId = req.body.jugador.id
+    const jugador = jugadores.find((jugador) => jugador.id = jugadorId)
+    jugador.fought = false
+    jugador.vidas = 3
+    jugador.ataques = []
     const enemigos = jugadores.filter((jugador) => jugadorId != jugador.id)
     res.send(
         {
             enemigos
         }
     )
-
 })
 
 app.listen(8080, () => {

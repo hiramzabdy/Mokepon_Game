@@ -3,8 +3,8 @@ let jugador
 let enemigo
 let ataqueJugador
 let ataqueEnemigo
-let vidasJugador = 3
-let vidasEnemigo = 3
+let vidasJugador
+let vidasEnemigo
 let intervalo
 //mokepones
 let enemigosOnline = []
@@ -51,11 +51,11 @@ class Jugador {
 }
 
 class Mokepon {
-    constructor(nombre, imagen, miniatura, vida, attackCount){
+    constructor(nombre, imagen, miniatura, vidas, attackCount){
         this.nombre = nombre
         this.imagen = imagen
         this.miniatura = miniatura
-        this.vida = vida
+        this.vidas = vidas
         this.attackCount = attackCount
         this.ataques = []
         //for canvas
@@ -100,9 +100,9 @@ function unirseAlJuego(){
 }
 
 function crearMokepones(){
-    let hipodoge = new Mokepon("Hipodoge", "./assets/mokepones/hipodoge.png", "./assets/thumbnails/hipodoge.png", vida = 5, [1,3,1])
-    let capipepo = new Mokepon("Capipepo", "./assets/mokepones/capipepo.png", "./assets/thumbnails/capipepo.png", vida = 5, [1,1,3])
-    let ratigueya = new Mokepon("Ratigueya", "./assets/mokepones/ratigueya.png", "./assets/thumbnails/ratigueya.png", vida = 5, [3,1,1])
+    let hipodoge = new Mokepon("Hipodoge", "./assets/mokepones/hipodoge.png", "./assets/thumbnails/hipodoge.png", vidas = 3, [1,3,1])
+    let capipepo = new Mokepon("Capipepo", "./assets/mokepones/capipepo.png", "./assets/thumbnails/capipepo.png", vidas = 3, [1,1,3])
+    let ratigueya = new Mokepon("Ratigueya", "./assets/mokepones/ratigueya.png", "./assets/thumbnails/ratigueya.png", vidas = 3, [3,1,1])
     mokepones.push(hipodoge,capipepo,ratigueya)
     //Adds atacks to mokepon acording to the attackCount
     mokepones.forEach(mokepon => {
@@ -267,11 +267,11 @@ function crearMokeponOnline(listaEnemigosOnline){
         let enemigoxd = new Jugador (enemigoOnline.id)
         let mascota
         if(enemigoOnline.mascota.nombre == "Ratigueya"){
-            mascota = new Mokepon("Ratigueya", "./assets/mokepones/ratigueya.png", "./assets/thumbnails/ratigueya.png", vida = 5, [3,1,1])
+            mascota = new Mokepon("Ratigueya", "./assets/mokepones/ratigueya.png", "./assets/thumbnails/ratigueya.png", vidas = 3, [3,1,1])
         }else if(enemigoOnline.mascota.nombre == "Capipepo"){
-            mascota = new Mokepon("Capipepo", "./assets/mokepones/capipepo.png", "./assets/thumbnails/capipepo.png", vida = 5, [1,1,3])
+            mascota = new Mokepon("Capipepo", "./assets/mokepones/capipepo.png", "./assets/thumbnails/capipepo.png", vidas = 3, [1,1,3])
         }else if(enemigoOnline.mascota.nombre == "Hipodoge"){
-            mascota = new Mokepon("Hipodoge", "./assets/mokepones/hipodoge.png", "./assets/thumbnails/hipodoge.png", vida = 5, [1,3,1])
+            mascota = new Mokepon("Hipodoge", "./assets/mokepones/hipodoge.png", "./assets/thumbnails/hipodoge.png", vidas = 3, [1,3,1])
         }
         agregarAtaques(mascota)
         enemigoxd.asignarMascota(mascota)
@@ -349,6 +349,10 @@ function detenerMascota(eje="button"){
 // funciones para combate
 
 function agregarImagenesMascotas(){
+    vidasJugador = jugador.mascota.vidas
+    vidasEnemigo = enemigo.mascota.vidas
+    vidasEnemigoSpan.innerHTML = vidasJugador
+    vidasEnemigoSpan.innerHTML = vidasEnemigo
     let miniaturaJugador = document.getElementById("miniatura-jugador")
     let miniaturaEnemigo = document.getElementById("miniatura-enemigo")
     miniaturaJugador.src = jugador.mascota.miniatura
@@ -361,6 +365,7 @@ function agregarImagenesMascotas(){
 }
 
 function mostrarAtaques(){
+    divAtaques.innerHTML = ""
     ataques = jugador.mascota.ataques
     ataques.forEach(ataque => {
       divAtaques.innerHTML += `
@@ -388,6 +393,7 @@ function seleccionarAtaques(){
 }
 
 function resultadoBatallaBackend(){
+    console.log("Esperando respuesta")
     fetch(`http://localhost:8080/mokepon/${jugador.id}/versus/${enemigo.id}`)
         .then(function(res){
             if(res.ok){
@@ -495,25 +501,31 @@ function crearMensajeFinal(resultado){
 }
 
 function reiniciarJuego(){
-    fetch("http://localhost:8080/eliminar", {
-        method: "post",
-        headers: {
-            "Content-Type": "Application/json"
-        },
-        body: JSON.stringify({
-            jugador: jugador
+    if(vidasJugador > 0){
+        fetch("http://localhost:8080/eliminar", {
+            method: "post",
+            headers: {
+                "Content-Type": "Application/json"
+            },
+            body: JSON.stringify({
+                jugador: jugador
+            })
         })
-    })
-        .then((res) => {
-            if(res.ok){
-                res.json()
-                    .then(function(res){
-                        console.log("enemigos", res)
-                        filtrarEnemigos(res.enemigos)
-                        mostrarMapa()
-                    })
-            }
-        })
+            .then((res) => {
+                if(res.ok){
+                    res.json()
+                        .then(function(res){
+                            filtrarEnemigos(res.enemigos)
+                            sectionGameScreen.style.display = "none"
+                            jugador.mascota.vidas = 3
+                            agregarAtaques(jugador.mascota)
+                            mostrarMapa()
+                        })
+                }
+            })
+    }else{
+        location.reload()
+    }
 }
 
 function aleatorio(min, max) {
