@@ -137,7 +137,6 @@ app.post("/eliminar", (req, res) => {
     eliminarJugador()
     jugador = jugadores.find((element) => element.id == req.body.jugador.id)
     asignarMascota(jugador, jugador.mascota.nombre)
-    console.log(jugador.mascota)
     const enemigos = jugadores.filter((element) => element.id != req.body.jugador.id)
     res.send(
         {

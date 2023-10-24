@@ -343,7 +343,7 @@ function crearMensajeFinal(resultado){
 }
 
 function reiniciarJuego(){
-    if(vidasJugador > 0){
+    if(vidasJugador > vidasEnemigo || vidasJugador == vidasEnemigo){
         fetch("http://localhost:8080/eliminar", {
             method: "post",
             headers: {
@@ -359,6 +359,9 @@ function reiniciarJuego(){
                         .then(function(res){
                             filtrarEnemigos(res.enemigos)
                             sectionGameScreen.style.display = "none"
+                            pResultado.style.background = "darkgrey"
+                            pResultado.innerHTML = "¡Que comience el juego!"
+                            botonReiniciar.style.display = "none"
                             jugador.mascota.vidas = 3
                             agregarAtaques(jugador.mascota)
                             mostrarMapa()
