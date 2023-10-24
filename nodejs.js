@@ -1,48 +1,62 @@
 const express = require("express")
 const cors = require("cors")
+const e = require("express")
 
 const app = express()
 app.use(cors())
 app.use(express.json())
 
 class Jugador {
-    constructor(id, vidas = 3){
+    constructor(id, nombreMascota=""){
         this.id = id
-        this.ataques = []
-        this.vidas = vidas
-        this.fought = false
+        this.nombreMascota = nombreMascota
     }
 
     asignarMascota(mokepon){
         this.mascota = mokepon
     }
+}
 
+class Mokepon {
+    constructor(nombre, vidas){
+        this.nombre = nombre
+        this.vidas = vidas
+        this.ataque = ""
+        this.ataques = []
+        this.fought = false
+    }
+    
     actualizarPosicion(x,y){
         this.x = x
         this.y = y
     }
-
 }
 
-class Mokepon {
-    constructor(nombre){
-        this.nombre = nombre
+function asignarMascota(jugador, nombre){
+    let mascota
+    if(nombre == "Ratigueya"){
+        mascota = new Mokepon("Ratigueya", vidas = 3)
+    }else if(nombre == "Capipepo"){
+        mascota = new Mokepon("Capipepo", vidas = 3)
+    }else if(nombre == "Hipodoge"){
+        mascota = new Mokepon("Hipodoge", vidas = 3)
     }
+    jugador.asignarMascota(mascota)
 }
 
 function batallaSecuencial(jugador1, jugador2){
-    for (let index = 0; index < jugador1.ataques.length; index++) {
-        if(jugador1.vidas > 0 && jugador2.vidas > 0){
-            const ataque1 = jugador1.ataques[index]
-            const ataque2 = jugador2.ataques[index]
+    for (let index = 0; index < jugador1.mascota.ataques.length; index++) {
+        if(jugador1.mascota.vidas > 0 && jugador2.mascota.vidas > 0){
+            const ataque1 = jugador1.mascota.ataques[index]
+            const ataque2 = jugador2.mascota.ataques[index]
             if (ataque1 == "Fuego 🔥" && ataque2 == "Tierra 🌱") {
-                jugador2.vidas--
+                jugador2.mascota.vidas-=1
             } else if (ataque1 == "Agua 💧" && ataque2 == "Fuego 🔥") {
-                jugador2.vidas--
+                jugador2.mascota.vidas-=1
             } else if (ataque1 == "Tierra 🌱" && ataque2 == "Agua 💧") {
-                jugador2.vidas--
-            } else {
-                jugador1.vidas--
+                jugador2.mascota.vidas-=1
+            } else if(ataque1 != ataque2){
+                jugador1.mascota.vidas-=1
             }
         }
     }
@@ -51,11 +65,14 @@ function batallaSecuencial(jugador1, jugador2){
 }
 
 function eliminarJugador(){
+    console.log(jugadores)
     for (let index = 0; index < jugadores.length; index++) {
         const element = jugadores[index]
-        if(element.vidas == 0){
-            jugadores.splice(index, 1)
-        }   
+        if(element.mascota != undefined){
+            if(element.mascota.vidas == 0){
+                jugadores.splice(index, 1)
+            }   
+        }
     }
 }
 
@@ -70,28 +87,21 @@ app.get("/start", (req,res) => {
 })
 
 app.post("/mokepon/:jugadorId", (req, res) => {
-    const jugadorId = req.params.jugadorId || "noHayNoExiste"
-    const mascota = req.body.mokepon || "tampocoHayTampocoExiste"
-    const mokepon = new Mokepon(mascota.nombre)
-    const indexJugador = jugadores.findIndex((jugador) => jugador.id == jugadorId)
-
-    if(indexJugador >= 0){
-        jugadores[indexJugador].asignarMascota(mokepon)
-    }
-    
+    const jugadorId = req.params.jugadorId
+    const jugador = jugadores.find((element) => element.id == jugadorId)
+    const mokepon = req.body.mokepon.nombre
+    jugador.nombreMascota = mokepon
+    asignarMascota(jugador, jugador.nombreMascota)
     res.end()
 })
 
-
 app.post("/mokepon/:jugadorId/posicion", (req, res) => {
-    const jugadorId = req.params.jugadorId || "noHayNoExiste"
+    const jugadorId = req.params.jugadorId
+    const jugador = jugadores.find((element) => element.id == jugadorId)
     const x = req.body.x || 0
     const y = req.body.y || 0
-    const indexJugador = jugadores.findIndex((jugador) => jugador.id == jugadorId)
-    if(indexJugador >= 0){
-        jugadores[indexJugador].actualizarPosicion(x,y)
-    }
-    const enemigos = jugadores.filter((jugador) => jugadorId != jugador.id)
+    jugador.mascota.actualizarPosicion(x, y)
+    const enemigos = jugadores.filter((element) => jugador.id != element.id)
     res.send(
         {
             enemigos
@@ -100,23 +110,19 @@ app.post("/mokepon/:jugadorId/posicion", (req, res) => {
 })
 
 app.post("/mokepon/:jugadorId/ataque", (req, res) => {
-    const jugadorId = req.params.jugadorId
+    const jugador = jugadores.find((element) => element.id == req.params.jugadorId)
     const ataque = req.body.ataque
-    const enemigoId = req.body.enemigo.id
-    const jugador = jugadores.find((jugador) => jugador.id == jugadorId)
-    const enemigo = jugadores.find((jugador) => jugador.id == enemigoId)
-    jugador.ataques.push(ataque)
-    if(jugador.ataques.length == 5 && enemigo.ataques.length == 5){
+    const enemigo = jugadores.find((element) => element.id == req.body.enemigo.id)
+    jugador.mascota.ataques.push(ataque)
+    if(jugador.mascota.ataques.length == 5 && enemigo.mascota.ataques.length == 5){
         batallaSecuencial(jugador, enemigo)
     }
     res.end()
 })
 
 app.get("/mokepon/:jugadorId/versus/:enemigoId", (req, res) => {
-    const jugadorId = req.params.jugadorId
-    const enemigoId = req.params.enemigoId
-    const jugador = jugadores.find((jugador) => jugador.id == jugadorId)
-    const enemigo = jugadores.find((jugador) => jugador.id == enemigoId)
+    const jugador = jugadores.find((element) => element.id == req.params.jugadorId)
+    const enemigo = jugadores.find((element) => element.id == req.params.enemigoId)
     if(jugador.fought && enemigo.fought){
         res.send({
             jugador: jugador,
@@ -129,12 +135,10 @@ app.get("/mokepon/:jugadorId/versus/:enemigoId", (req, res) => {
 
 app.post("/eliminar", (req, res) => {
     eliminarJugador()
-    const jugadorId = req.body.jugador.id
-    const jugador = jugadores.find((jugador) => jugador.id = jugadorId)
-    jugador.fought = false
-    jugador.vidas = 3
-    jugador.ataques = []
-    const enemigos = jugadores.filter((jugador) => jugadorId != jugador.id)
+    jugador = jugadores.find((element) => element.id == req.body.jugador.id)
+    asignarMascota(jugador, jugador.mascota.nombre)
+    console.log(jugador.mascota)
+    const enemigos = jugadores.filter((element) => element.id != req.body.jugador.id)
     res.send(
         {
             enemigos
